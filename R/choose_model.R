@@ -68,5 +68,5 @@ choose_model <- function(dataset,
   }
 
   return(
-    list(model = best_model$model, score = best_score, knots = best_knots))
+    list(model = best_model, score = best_score, knots = best_knots))
 }
