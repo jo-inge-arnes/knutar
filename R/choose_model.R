@@ -3,8 +3,8 @@
 #' The target number of knots for the model is given as a parameter. The
 #' algorithm starts with a regression model with a high number of knots and
 #' systematically removes knots until the target number of knots is reached.
-#' The initial number of knots can be given as a parameter, and defaults to
-#' half of the number of rows in the dataset, using integer division by two.
+#' The initial number of knots can be given as a parameter, and defaults to the
+#' suggested number of knots obtained from the function 'suggest_knotcount'.
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
@@ -12,7 +12,7 @@
 #' @param icr_fn The information criterion function (BIC default)
 #' @param cost_fn For comparing models with equal knot counts (default AIC)
 #' @param initial_nknots The initial high number of knots for the algorithm
-#' (default is the value from the suggest_knotcount-function)
+#' (default is the value from the 'suggest_knotcount'-function)
 #' @param diff_better How much lower must the score be for a higher knot count
 #' model to be considered a better model than a lower knot model?
 #' @return The suggested chosen 'model', 'score', and 'nknots'

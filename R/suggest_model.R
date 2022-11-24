@@ -4,14 +4,14 @@
 #' The target number of knots for the model is given as a parameter. The
 #' algorithm starts with a regression model with a high number of knots and
 #' systematically removes knots until the target number of knots is reached.
-#' The initial number of knots can be given as a parameter, and defaults to
-#' half of the number of rows in the dataset, using integer division by two.
+#' The initial number of knots can be given as a parameter, and defaults to the
+#' suggested number of knots obtained from the function 'suggest_knotcount'.
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
 #' @param target_nknots The target and maximum number of knots for the model
 #' @param initial_nknots The number of knots initially, defaults to the
-#' result from the suggest_knotcount-function
+#' result from the function 'suggest_knotcount'
 #' @param cost_fn The function for the selection criterion score (AIC default)
 #' @return The suggested regression model
 #' @export
