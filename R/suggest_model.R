@@ -1,0 +1,58 @@
+#' Suggests a model with knot placements that usually are non-uniform with
+#' respect to quantiles and widths
+#'
+#' The target number of knots for the model is given as a parameter. The
+#' algorithm starts with a regression model with a high number of knots and
+#' systematically removes knots until the target number of knots is reached.
+#' The initial number of knots can be given as a parameter, and defaults to
+#' half of the number of rows in the dataset, using integer division by two.
+#' @param dataset The data frame
+#' @param dependent The dependent variable in the formula
+#' @param independents The independent variables in the formula
+#' @param target_nknots The target and maximum number of knots for the model
+#' @param initial_nknots The number of knots initially, default to nrow(d) / 2
+#' @param cost_fn The function for the selection criterion score (AIC default)
+#' @return The suggested regression model
+#' @keywords knots, splines, regressions
+#' @export
+#' @examples
+#' my_model <- suggest_model(d, y, x, 7)
+#' my_model <- suggest_model(d, y, x, 7, 300, BIC)
+suggest_model <- function(dataset,
+                          dependent,
+                          independents,
+                          target_nknots,
+                          initial_nknots = -1,
+                          cost_fn = AIC) {
+  independents <- enquo(independents)
+  dependent <- enquo(dependent)
+
+  if (initial_nknots == -1) {
+    initial_nknots <- nrow(dataset) %/% 2
+  }
+
+  # Find the initial model with a high number of knots, and get the distinct
+  # knot placements
+  ns_model <-
+    model_by_count(dataset, !!dependent, !!independents, initial_nknots)
+  knots <- extract_knots(ns_model)
+
+  # Initialize the variables that will hold the final knot placements
+  final_knots <- knots$knots
+  boundary_knots <- knots$Boundary.knots
+
+  # As long as there are more knots left than the target number, remove knots
+  # one by one, by always removing the knot that gives the best resulting model
+  if (length(knots$knots) > target_nknots) {
+    for (i in 1:(length(knots$knots) - target_nknots)) {
+      rm_index <- choose_removal(dataset, !!dependent, !!independents,
+        knots = final_knots, boundary_knots = boundary_knots, cost_fn)$index
+      final_knots <- final_knots[-rm_index]
+    }
+  }
+
+  final_mod <- model_by_knots(dataset, !!dependent, !!independents,
+    knots = final_knots, boundary_knots = boundary_knots)
+
+  return(final_mod)
+}
