@@ -1,4 +1,4 @@
-#' Chooses the best of models with a knot count equal or lower than a maximum.
+#' Chooses the best of models with a knot count equal or lower than a maximum
 #'
 #' The maximum number of knots for the model is given as a parameter.
 #' @param dataset The data frame
@@ -9,13 +9,13 @@
 #' @param cost_fn For comparing models with equal knot counts (default AIC)
 #' @param initial_nknots The initial high number of knots for the algorithm
 #' (default is the value from the 'suggest_knotcount'-function)
-#' @param diff_better How much lower must the score be for a higher knot count
-#' model to be considered a better model than a lower knot model?
-#' @return The suggested chosen 'model', 'score', and 'nknots'
+#' @param diff_better How much lower must the score be to make a higher knot
+#' model be deemed a better model than an alternative lower knot model?
+#' @return The chosen 'model', 'score', and 'nknots'
 #' @export
 #' @examples
 #' my_model <- suggest_model(d, y, x, 7)
-#' my_model <- suggest_model(d, y, x, 7, 300, BIC)
+#' my_model <- suggest_model(d, y, x, 7, AIC)
 choose_model <- function(dataset,
                         dependent,
                         independents,
