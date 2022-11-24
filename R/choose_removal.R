@@ -8,9 +8,9 @@
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
 #' @param knots The knot placements
-#' @param knots The boundary knot placements
+#' @param boundary_knots The boundary knot placements
 #' @param cost_fn The function for the selection criterion score (AIC default)
-#' @return A named list with 'index' of the chosen knot, 'model', and 'cost'
+#' @return A named list with 'index' of the chosen knot, 'model', and 'score'
 #' @export
 #' @examples
 #' removal_index <- choose_removal(my_data, y, x, knots, boundary_knots)$index
@@ -24,6 +24,7 @@ choose_removal <- function(dataset,
                                 cost_fn = stats::AIC) {
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
+
   model_scores <- lapply(seq_along(knots), function(i) {
     mod <- model_by_knots(dataset, !!dependent, !!independents,
       knots = knots[-i], boundary_knots = boundary_knots)
@@ -32,9 +33,9 @@ choose_removal <- function(dataset,
   })
 
   scores <- unlist(lapply(model_scores, "[[", "score"))
-  min_score <- min(scores)
   index <- which.min(scores)
+  min_score <- scores[[min_score]]
 
   return(list(model = model_scores[[index]][["model"]],
-    cost = min_score, index = index))
+    score = min_score, index = index))
 }

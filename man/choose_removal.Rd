@@ -20,12 +20,14 @@ choose_removal(
 
 \item{independents}{The independent variables in the formula}
 
-\item{knots}{The boundary knot placements}
+\item{knots}{The knot placements}
+
+\item{boundary_knots}{The boundary knot placements}
 
 \item{cost_fn}{The function for the selection criterion score (AIC default)}
 }
 \value{
-A named list with 'index' of the chosen knot, 'model', and 'cost'
+A named list with 'index' of the chosen knot, 'model', and 'score'
 }
 \description{
 The function searches through the knots of the given model to find the knot
