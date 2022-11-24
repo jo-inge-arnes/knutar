@@ -1,6 +1,6 @@
 #' Chooses the best of found models within a range of knot counts.
 #'
-#' The target number of knots for the model is given as a parameter. The
+#' The maximum number of knots for the model is given as a parameter. The
 #' algorithm starts with a regression model with a high number of knots and
 #' systematically removes knots until the target number of knots is reached.
 #' The initial number of knots can be given as a parameter, and defaults to the
