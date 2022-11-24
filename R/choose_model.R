@@ -1,10 +1,6 @@
-#' Chooses the best of found models within a range of knot counts.
+#' Chooses the best of models with a knot count equal or lower than a maximum.
 #'
-#' The maximum number of knots for the model is given as a parameter. The
-#' algorithm starts with a regression model with a high number of knots and
-#' systematically removes knots until the target number of knots is reached.
-#' The initial number of knots can be given as a parameter, and defaults to the
-#' suggested number of knots obtained from the function 'suggest_knotcount'.
+#' The maximum number of knots for the model is given as a parameter.
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
