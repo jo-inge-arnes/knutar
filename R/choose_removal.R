@@ -34,7 +34,7 @@ choose_removal <- function(dataset,
 
   scores <- unlist(lapply(model_scores, "[[", "score"))
   index <- which.min(scores)
-  min_score <- scores[[min_score]]
+  min_score <- scores[[index]]
 
   return(list(model = model_scores[[index]][["model"]],
     score = min_score, index = index))
