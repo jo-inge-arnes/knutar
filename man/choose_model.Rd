@@ -2,14 +2,13 @@
 % Please edit documentation in R/choose_model.R
 \name{choose_model}
 \alias{choose_model}
-\title{Chooses the best of found models within a range of knots.}
+\title{Chooses the best of found models within a range of knot counts.}
 \usage{
 choose_model(
   dataset,
   dependent,
   independents,
   max_nknots = 10,
-  min_nknots = 1,
   icr_fn = stats::BIC,
   cost_fn = stats::AIC,
   initial_nknots = -1,
@@ -34,8 +33,6 @@ choose_model(
 
 \item{diff_better}{How much lower must the score be for a higher knot count
 model to be considered a better model than a lower knot model?}
-
-\item{min_knots}{The minimum wanted number of knots}
 }
 \value{
 The suggested chosen 'model', 'score', and 'nknots'

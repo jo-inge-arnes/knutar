@@ -6,7 +6,7 @@
 #' @param independents The independent variable(s) in the formula
 #' @param maximum_knots The highest knot count to assess. Defaults to 300
 #' @param info_crit The information criterion function. Defaults to AIC
-#' @return A list with named elements 'num_knots' and 'score'
+#' @return A list with named elements 'nknots' and 'score'
 #' @importFrom splines ns
 #' @export
 #' @examples
@@ -14,17 +14,20 @@
 suggest_knotcount <- function(dataset,
                 dependent,
                 independents,
-                maximum_knots = 300,
+                max_nknots = -1,
                 info_crit = stats::AIC) {
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
+  if (max_nknots == -1) {
+    max_nknots <- nrow(dataset) %/% 2
+  }
+
   min_icr <- Inf
   min_ndf <- Inf
 
-  for (i in 2:(maximum_knots + 1)) {
-    model_formula <-
-      stats::formula(paste0(
+  for (i in 2:(max_nknots + 1)) {
+    model_formula <- stats::formula(paste0(
         rlang::as_name(dependent),
         " ~ ns(",
         rlang::as_name(independents),
@@ -42,5 +45,5 @@ suggest_knotcount <- function(dataset,
     }
   }
 
-  return(list(num_knots = min_ndf - 1, score = min_icr))
+  return(list(nknots = min_ndf - 1, score = min_icr))
 }

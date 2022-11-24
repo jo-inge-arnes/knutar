@@ -1,4 +1,4 @@
-#' Chooses the best of found models within a range of knots.
+#' Chooses the best of found models within a range of knot counts.
 #'
 #' The target number of knots for the model is given as a parameter. The
 #' algorithm starts with a regression model with a high number of knots and
@@ -9,7 +9,6 @@
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
 #' @param max_nknots The maximum wanted number of knots
-#' @param min_knots The minimum wanted number of knots
 #' @param icr_fn The information criterion function (BIC default)
 #' @param cost_fn For comparing models with equal knot counts (default AIC)
 #' @param initial_nknots The initial high number of knots for the algorithm
@@ -25,7 +24,6 @@ choose_model <- function(dataset,
                         dependent,
                         independents,
                         max_nknots = 10,
-                        min_nknots = 1,
                         icr_fn = stats::BIC,
                         cost_fn = stats::AIC,
                         initial_nknots = -1,
@@ -37,13 +35,6 @@ choose_model <- function(dataset,
     initial_nknots <- nrow(dataset) %/% 2
   }
 
-  min_max_vals <- c(min_nknots, max_nknots)
-  max_nknots <- max(min_max_vals)
-  min_nknots <- min(min_max_vals)
-  if (min_nknots < 1) {
-    min_nknots <- 1
-  }
-
   upper_model <- suggest_model(dataset, !!dependent, !!independents,
     max_nknots, initial_nknots, cost_fn)
 
@@ -53,7 +44,11 @@ choose_model <- function(dataset,
   best_score <- cur_score
   best_knots <- extract_knots(best_model)
 
-  for (cur_nknots in min_nknots:(max_nknots - 1)) {
+  if (length(best_knots) < max_nknots) {
+    max_nknots <- length(best_knots$knots)
+  }
+
+  for (cur_nknots in 1:(max_nknots - 1)) {
     these_knots <- extract_knots(cur_model)
     chosen <- choose_removal(dataset, !!dependent, !!independents,
       these_knots$knots, these_knots$Boundary.knots, cost_fn)
@@ -70,3 +65,37 @@ choose_model <- function(dataset,
   return(
     list(model = best_model, score = best_score, knots = best_knots))
 }
+
+# main <- function() {
+#   library(tidyverse)
+#   library(tidyr)
+#   library("cladina")
+
+#   d <- read.table(
+#     "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
+#     sep = ",", header = TRUE)
+#   d <- d %>%
+#       drop_na(nwsize) %>%
+#       drop_na(age) %>%
+#       mutate(age_years = 2022 - age, age_dec = age_years / 10)
+
+
+#   # Just to make is the same as the fields in the synthetic data
+#   d$Independent <- d$age_dec
+#   d$Dependent <- d$nwsize
+#   d$SignalMeasured <- d$Dependent
+
+#   # Shuffle the rows
+#   set.seed(7)
+#   d <- d[sample(1:nrow(d)), ]
+
+#   # Bootstrap the data to create a training and a test set
+#   n_split <- trunc(nrow(d) * 0.5)
+#   d_full <- d
+#   d <- d_full[1:n_split, ]
+#   d_test <- d_full[(n_split + 1):nrow(d_full), ]
+
+#   best_global_nknots <- suggest_knotcount(d, nwsize, age_dec)$num_knots
+
+#   cladina_res <- choose_model(d, nwsize, age_dec, 10, initial_nknots =  best_global_nknots, diff_better = 2)
+# }

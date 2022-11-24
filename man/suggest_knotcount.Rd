@@ -9,7 +9,7 @@ suggest_knotcount(
   dataset,
   dependent,
   independents,
-  maximum_knots = 300,
+  max_nknots = -1,
   info_crit = stats::AIC
 )
 }
@@ -20,12 +20,12 @@ suggest_knotcount(
 
 \item{independents}{The independent variable(s) in the formula}
 
-\item{maximum_knots}{The highest knot count to assess. Defaults to 300}
-
 \item{info_crit}{The information criterion function. Defaults to AIC}
+
+\item{maximum_knots}{The highest knot count to assess. Defaults to 300}
 }
 \value{
-A list with named elements 'num_knots' and 'score'
+A list with named elements 'nknots' and 'score'
 }
 \description{
 Finds the number of natural spline knots that gives the lowest score for an
