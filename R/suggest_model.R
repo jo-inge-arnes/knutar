@@ -10,7 +10,8 @@
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
 #' @param target_nknots The target and maximum number of knots for the model
-#' @param initial_nknots The number of knots initially, default to nrow(d) / 2
+#' @param initial_nknots The number of knots initially, defaults to the
+#' result from the suggest_knotcount-function
 #' @param cost_fn The function for the selection criterion score (AIC default)
 #' @return The suggested regression model
 #' @export
@@ -27,7 +28,8 @@ suggest_model <- function(dataset,
   dependent <- rlang::enquo(dependent)
 
   if (initial_nknots == -1) {
-    initial_nknots <- nrow(dataset) %/% 2
+    initial_nknots <-
+      suggest_knotcount(dataset, !!dependent, !!independents)$nknots
   }
 
   # Find the initial model with a high number of knots, and get the distinct

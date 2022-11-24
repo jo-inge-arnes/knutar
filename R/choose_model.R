@@ -32,7 +32,8 @@ choose_model <- function(dataset,
   dependent <- rlang::enquo(dependent)
 
   if (initial_nknots == -1) {
-    initial_nknots <- suggest_knotcount(d, !!dependent, !!independents)$nknots
+    initial_nknots <-
+      suggest_knotcount(dataset, !!dependent, !!independents)$nknots
     # initial_nknots <- nrow(dataset) %/% 2
   }
 

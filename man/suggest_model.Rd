@@ -23,7 +23,8 @@ suggest_model(
 
 \item{target_nknots}{The target and maximum number of knots for the model}
 
-\item{initial_nknots}{The number of knots initially, default to nrow(d) / 2}
+\item{initial_nknots}{The number of knots initially, defaults to the
+result from the suggest_knotcount-function}
 
 \item{cost_fn}{The function for the selection criterion score (AIC default)}
 }
