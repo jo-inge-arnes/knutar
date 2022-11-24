@@ -7,6 +7,7 @@
 #' @param maximum_knots The highest knot count to assess. Defaults to 300
 #' @param info_crit The information criterion function. Defaults to AIC
 #' @return A list with named elements 'num_knots' and 'score'
+#' @importFrom splines ns
 #' @export
 #' @examples
 #' suggest_knotcount(d, nwsize, age_dec)

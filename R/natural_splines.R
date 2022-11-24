@@ -6,6 +6,7 @@
 #' @param independents The independent variables in the formula
 #' @param nknots The requested number of knots
 #' @return The regression model
+#' @importFrom splines ns
 #' @export
 #' @examples
 #' my_model <- create_model(my_data, y, x, 7)
@@ -31,6 +32,7 @@ model_by_count <- function(dataset, dependent, independents, nknots) {
 #' @param knots The knot placements
 #' @param knots The boundary knot placements
 #' @return The regression model
+#' @importFrom splines ns
 #' @export
 #' @examples
 #' my_model <- model_by_knots(my_data, y, x, c(0.1, 0.2), c(0.0, 0.3))
