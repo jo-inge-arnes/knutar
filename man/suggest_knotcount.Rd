@@ -10,7 +10,7 @@ suggest_knotcount(
   dependent,
   independents,
   maximum_knots = 300,
-  info_crit = AIC
+  info_crit = stats::AIC
 )
 }
 \arguments{
@@ -34,6 +34,3 @@ information criterion and a data set.
 \examples{
 suggest_knotcount(d, nwsize, age_dec)
 }
-\keyword{knots,}
-\keyword{regressions}
-\keyword{splines,}

@@ -13,7 +13,6 @@
 #' @param initial_nknots The number of knots initially, default to nrow(d) / 2
 #' @param cost_fn The function for the selection criterion score (AIC default)
 #' @return The suggested regression model
-#' @keywords knots, splines, regressions
 #' @export
 #' @examples
 #' my_model <- suggest_model(d, y, x, 7)
@@ -23,9 +22,9 @@ suggest_model <- function(dataset,
                           independents,
                           target_nknots,
                           initial_nknots = -1,
-                          cost_fn = AIC) {
-  independents <- enquo(independents)
-  dependent <- enquo(dependent)
+                          cost_fn = stats::AIC) {
+  independents <- rlang::enquo(independents)
+  dependent <- rlang::enquo(dependent)
 
   if (initial_nknots == -1) {
     initial_nknots <- nrow(dataset) %/% 2

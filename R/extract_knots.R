@@ -2,7 +2,6 @@
 #'
 #' @param ns_model The natural spline regression model
 #' @return A list with named elements 'knots' and 'Boundary.knots'
-#' @keywords knots, splines, regressions
 #' @export
 #' @examples
 #' extract_knots(my_model)

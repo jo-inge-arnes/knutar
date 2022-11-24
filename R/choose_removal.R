@@ -11,7 +11,6 @@
 #' @param knots The boundary knot placements
 #' @param cost_fn The function for the selection criterion score (AIC default)
 #' @return A named list with 'index' of the chosen knot, 'model', and 'cost'
-#' @keywords knots, splines, regressions
 #' @export
 #' @examples
 #' removal_index <- choose_removal(my_data, y, x, knots, boundary_knots)$index
@@ -22,10 +21,10 @@ choose_removal <- function(dataset,
                                 independents,
                                 knots,
                                 boundary_knots,
-                                cost_fn = AIC) {
-  independents <- enquo(independents)
-  dependent <- enquo(dependent)
-  model_scores <- lapply(1:length(knots), function(i) {
+                                cost_fn = stats::AIC) {
+  independents <- rlang::enquo(independents)
+  dependent <- rlang::enquo(dependent)
+  model_scores <- lapply(seq_along(knots), function(i) {
     mod <- model_by_knots(dataset, !!dependent, !!independents,
       knots = knots[-i], boundary_knots = boundary_knots)
     mod_score <- cost_fn(mod)

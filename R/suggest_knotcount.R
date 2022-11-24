@@ -1,5 +1,3 @@
-library(rlang)
-
 #' Finds the number of natural spline knots that gives the lowest score for an
 #' information criterion and a data set.
 #'
@@ -9,7 +7,6 @@ library(rlang)
 #' @param maximum_knots The highest knot count to assess. Defaults to 300
 #' @param info_crit The information criterion function. Defaults to AIC
 #' @return A list with named elements 'num_knots' and 'score'
-#' @keywords knots, splines, regressions
 #' @export
 #' @examples
 #' suggest_knotcount(d, nwsize, age_dec)
@@ -17,19 +14,24 @@ suggest_knotcount <- function(dataset,
                 dependent,
                 independents,
                 maximum_knots = 300,
-                info_crit = AIC) {
-  dependent <- enquo(dependent)
-  independents <- enquo(independents)
+                info_crit = stats::AIC) {
+  dependent <- rlang::enquo(dependent)
+  independents <- rlang::enquo(independents)
 
   min_icr <- Inf
   min_ndf <- Inf
 
   for (i in 2:(maximum_knots + 1)) {
     model_formula <-
-      formula(paste0(as_name(dependent), " ~ ns(", as_name(independents),
-        ", df = ", i, ")"))
+      stats::formula(paste0(
+        rlang::as_name(dependent),
+        " ~ ns(",
+        rlang::as_name(independents),
+        ", df = ",
+        i,
+        ")"))
 
-    mod_spline <- lm(model_formula, data = dataset)
+    mod_spline <- stats::lm(model_formula, data = dataset)
 
     icr_score <- info_crit(mod_spline)
 

@@ -1,14 +1,37 @@
+#' Chooses the best of found models within a range of knots.
+#'
+#' The target number of knots for the model is given as a parameter. The
+#' algorithm starts with a regression model with a high number of knots and
+#' systematically removes knots until the target number of knots is reached.
+#' The initial number of knots can be given as a parameter, and defaults to
+#' half of the number of rows in the dataset, using integer division by two.
+#' @param dataset The data frame
+#' @param dependent The dependent variable in the formula
+#' @param independents The independent variables in the formula
+#' @param max_nknots The maximum wanted number of knots
+#' @param min_knots The minimum wanted number of knots
+#' @param icr_fn The information criterion function (BIC default)
+#' @param cost_fn For comparing models with equal knot counts (default AIC)
+#' @param initial_nknots The initial high number of knots for the algorithm
+#' (default is nrow(dataset) %/% 2)
+#' @param diff_better How much lower must the score be for a higher knot count
+#' model to be considered a better model than a lower knot model?
+#' @return The suggested chosen 'model', 'score', and 'nknots'
+#' @export
+#' @examples
+#' my_model <- suggest_model(d, y, x, 7)
+#' my_model <- suggest_model(d, y, x, 7, 300, BIC)
 choose_model <- function(dataset,
                         dependent,
                         independents,
                         max_nknots = 10,
                         min_nknots = 1,
-                        icr_fn = BIC,
-                        cost_fn = AIC,
+                        icr_fn = stats::BIC,
+                        cost_fn = stats::AIC,
                         initial_nknots = -1,
                         diff_better = 0) {
-  independents <- enquo(independents)
-  dependent <- enquo(dependent)
+  independents <- rlang::enquo(independents)
+  dependent <- rlang::enquo(dependent)
 
   if (initial_nknots == -1) {
     initial_nknots <- nrow(dataset) %/% 2
@@ -44,5 +67,6 @@ choose_model <- function(dataset,
     cur_model <- chosen$model
   }
 
-  return(list(model = best_model$model, score = best_score))
+  return(
+    list(model = best_model$model, score = best_score, nknots = best_nknots))
 }
