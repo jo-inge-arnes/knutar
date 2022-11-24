@@ -12,7 +12,7 @@
 #' @param icr_fn The information criterion function (BIC default)
 #' @param cost_fn For comparing models with equal knot counts (default AIC)
 #' @param initial_nknots The initial high number of knots for the algorithm
-#' (default is nrow(dataset) %/% 2)
+#' (default is the value from the suggest_knotcount-function)
 #' @param diff_better How much lower must the score be for a higher knot count
 #' model to be considered a better model than a lower knot model?
 #' @return The suggested chosen 'model', 'score', and 'nknots'
@@ -32,7 +32,8 @@ choose_model <- function(dataset,
   dependent <- rlang::enquo(dependent)
 
   if (initial_nknots == -1) {
-    initial_nknots <- nrow(dataset) %/% 2
+    initial_nknots <- suggest_knotcount(d, !!dependent, !!independents)$nknots
+    # initial_nknots <- nrow(dataset) %/% 2
   }
 
   upper_model <- suggest_model(dataset, !!dependent, !!independents,

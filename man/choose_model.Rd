@@ -29,7 +29,7 @@ choose_model(
 \item{cost_fn}{For comparing models with equal knot counts (default AIC)}
 
 \item{initial_nknots}{The initial high number of knots for the algorithm
-(default is nrow(dataset) \%/\% 2)}
+(default is the value from the suggest_knotcount-function)}
 
 \item{diff_better}{How much lower must the score be for a higher knot count
 model to be considered a better model than a lower knot model?}
