@@ -51,7 +51,7 @@ choose_model <- function(dataset,
   best_model <- cur_model
   cur_score <- icr_fn(best_model)
   best_score <- cur_score
-  best_nknots <- extract_knots(best_model)
+  best_knots <- extract_knots(best_model)
 
   for (cur_nknots in min_nknots:(max_nknots - 1)) {
     these_knots <- extract_knots(cur_model)
@@ -62,11 +62,11 @@ choose_model <- function(dataset,
     if (cur_score <= (best_score + diff_better)) {
       best_model <- chosen$model
       best_score <- cur_score
-      best_nknots <- extract_knots(best_model)
+      best_knots <- extract_knots(best_model)
     }
     cur_model <- chosen$model
   }
 
   return(
-    list(model = best_model$model, score = best_score, nknots = best_nknots))
+    list(model = best_model$model, score = best_score, knots = best_knots))
 }
