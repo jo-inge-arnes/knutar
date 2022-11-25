@@ -2,9 +2,10 @@
 
 export(choose_model)
 export(choose_removal)
+export(choose_splines)
 export(extract_knots)
 export(model_by_count)
 export(model_by_knots)
 export(suggest_knotcount)
-export(suggest_model)
+export(suggest_splines)
 importFrom(splines,ns)

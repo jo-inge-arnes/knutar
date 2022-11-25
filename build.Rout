@@ -26,6 +26,8 @@ Loading required package: usethis
 > document()
 ℹ Updating cladina documentation
 ℹ Loading cladina
+Writing 'NAMESPACE'
+Writing 'choose_model.Rd'
 > setwd("..")
 > install("cladina")
 * checking for file ‘/mnt/c/Projects/cladina/DESCRIPTION’ ... OK
@@ -33,10 +35,10 @@ Loading required package: usethis
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
-* building ‘cladina_0.0.0.9001.tar.gz’
+* building ‘cladina_0.0.0.9002.tar.gz’
 
 Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/RtmphYd9V1/cladina_0.0.0.9001.tar.gz --install-tests 
+  /tmp/Rtmpg72J0p/cladina_0.0.0.9002.tar.gz --install-tests 
 * installing to library ‘/home/jo/R/x86_64-pc-linux-gnu-library/4.1’
 * installing *source* package ‘cladina’ ...
 ** using staged installation
@@ -52,4 +54,4 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 > 
 > proc.time()
    user  system elapsed 
-  3.509   0.880   9.869 
+  3.173   1.272  10.679 

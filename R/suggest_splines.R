@@ -1,11 +1,12 @@
-#' Suggests a model with knot placements that usually are non-uniform with
-#' respect to quantiles and widths
+#' Suggests a natural splines regression model with knot placements that
+#' can be non-uniform with respect to quantiles and widths
 #'
-#' The target number of knots for the model is given as a parameter. The
-#' algorithm starts with a regression model with a high number of knots and
-#' systematically removes knots until the target number of knots is reached.
-#' The initial number of knots can be given as a parameter, and defaults to the
-#' suggested number of knots obtained from the function 'suggest_knotcount'.
+#' The target number of knots for the model is given as an input argument. The
+#' algorithm starts with a model with a high number of knots and systematically
+#' removes knots until the target number of knots is reached.
+#' The initial number of knots, before starting to remove knots, can be given
+#' as an argument as well, but  defaults to the suggested number of knots
+#' obtained from the function 'suggest_knotcount'.
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
@@ -13,12 +14,12 @@
 #' @param initial_nknots The number of knots initially, defaults to the
 #' result from the function 'suggest_knotcount'
 #' @param cost_fn The function for the selection criterion score (AIC default)
-#' @return The suggested regression model
+#' @return The suggested natural splines model
 #' @export
 #' @examples
-#' my_model <- suggest_model(d, y, x, 7)
-#' my_model <- suggest_model(d, y, x, 7, 300, BIC)
-suggest_model <- function(dataset,
+#' my_model <- suggest_splines(d, y, x, 7)
+#' my_model <- suggest_splines(d, y, x, 7, 300, BIC)
+suggest_splines <- function(dataset,
                           dependent,
                           independents,
                           target_nknots,
