@@ -20,7 +20,7 @@
 choose_model <- function(dataset,
                         dependent,
                         independents,
-                        icr_fn = stats::AIC,
+                        icr_fn = stats::BIC,
                         fp_alpha = NA,
                         max_nsknots = 7,
                         max_fp_df = 4,

@@ -10,7 +10,7 @@ choose_splines(
   dependent,
   independents,
   max_nknots = 10,
-  icr_fn = stats::AIC,
+  icr_fn = stats::BIC,
   cost_fn = stats::AIC,
   initial_nknots = -1,
   diff_better = 0
