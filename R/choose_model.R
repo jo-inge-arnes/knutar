@@ -48,7 +48,7 @@ choose_model <- function(dataset,
   mfp_mod <- eval(summary(mfp_res)$call)
   mfp_score <- icr_fn(mfp_mod)
 
-  score_type <- substitute(icr_fn)
+  score_type <- deparse(substitute(icr_fn))
   ret_desc <- list(
     "mfp" = "Multivariate fractional polynomials",
     "ns_nu" = "Natural splines with freely placed knots",
