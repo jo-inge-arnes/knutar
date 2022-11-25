@@ -1,4 +1,4 @@
-#' Function assessing different types of regression models, returing the one
+#' Function assessing different types of regression models, returning the one
 #' giving the best results according to an information criterion
 #'
 #' @param dataset The data frame
