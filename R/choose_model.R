@@ -47,8 +47,17 @@ choose_model <- function(dataset,
   }
   mfp_mod <- eval(summary(mfp_res)$call)
   mfp_score <- icr_fn(mfp_mod)
+
+
+  score_type <- as.character(substitute(icr_fn))
+  ret_desc <- list(
+    "mfp" = "Multivariate fractional polynomials",
+    "ns_nu" = "Natural splines with freely placed knots",
+    "ns" = "Natural splines with knots placed at quantiles")
+
   if (verbose) {
-    R.utils::printf("Multivariate fractional polynomial score: %f\n", mfp_score)
+    R.utils::printf("-----------------------------------------------------\n")
+    R.utils::printf("%s\n%s: %f\n\n", ret_desc[["mfp"]], score_type, mfp_score)
   }
 
   # Natural splines with knots distanced by equally sized bins (quantiles)
@@ -58,10 +67,12 @@ choose_model <- function(dataset,
     knotcnt_suggestion$nknots)
   ns_score <- icr_fn(ns_mod)
 
+
   if (verbose) {
-    R.utils::printf("Natural splines, knots by quartiles: %f ", ns_score)
-    R.utils::printf("Knot count: %d ", knotcnt_suggestion$nknots)
-    R.utils::printf("Distinct knots: %d\n", length(extract_knots(ns_mod)))
+    R.utils::printf("%s\n%s: %f\n", ret_desc[["ns"]], score_type, ns_score)
+    R.utils::printf("Suggested knot count: %d\n", knotcnt_suggestion$nknots)
+    print_knots(extract_knots(ns_mod))
+    R.utils::printf("\n")
   }
 
   # Natural splines with freely placed knots
@@ -69,9 +80,10 @@ choose_model <- function(dataset,
     max_nsknots, icr_fn)
 
   if (verbose) {
-    R.utils::printf("Natural splines non-uniform placements score: %f\n",
-      cladina_res$score)
-    R.utils::printf("Distinct knots: %d\n", length(cladina_res$knots))
+    R.utils::printf("%s\n%s: %f\n",
+      ret_desc[["ns_nu"]], score_type, cladina_res$score)
+    print_knots(cladina_res$knots)
+    R.utils::printf("\n")
   }
 
   if (mfp_score <= ns_score && mfp_score <= cladina_res$score) {
@@ -84,11 +96,7 @@ choose_model <- function(dataset,
   }
 
   if (verbose) {
-    ret_desc <- list(
-      "mfp" = "Multivariate fractional polynomials",
-      "ns_nu" = "Natural splines with non-uniform knot placements",
-      "ns" = "Natural splines with knots distanced by equally sized quantiles")
-    R.utils::printf("Chosen model type: %s\n", ret_desc[[ret$type]])
+    R.utils::printf("Chosen model type:\n%s\n", ret_desc[[ret$type]])
   }
 
   return(ret)
@@ -134,6 +142,5 @@ choose_model <- function(dataset,
 #   d_test <- read.table(file_name_test, sep = ",", header = TRUE)
 
 #   cladina_res <- choose_model(d, Dependent, Independent, AIC)
-#   cladina_res
 # }
 #endregion

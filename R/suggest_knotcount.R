@@ -26,7 +26,7 @@ suggest_knotcount <- function(dataset,
   min_icr <- Inf
   min_ndf <- Inf
 
-  for (i in 2:(max_nknots + 1)) {
+  for (i in 1:(max_nknots + 1)) {
     model_formula <- stats::formula(paste0(
         rlang::as_name(dependent),
         " ~ ns(",
