@@ -35,7 +35,7 @@ suggest_knotcount <- function(dataset,
         i,
         ")"))
 
-    mod_spline <- stats::lm(model_formula, data = dataset)
+    mod_spline <- stats::glm(model_formula, data = dataset)
 
     icr_score <- info_crit(mod_spline)
 

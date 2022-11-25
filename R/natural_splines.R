@@ -17,7 +17,7 @@ model_by_count <- function(dataset, dependent, independents, nknots) {
     paste0(rlang::as_name(dependent), " ~ ns(", rlang::as_name(independents),
     ", df = ", nknots + 1, ")"))
 
-  ns_model <- stats::lm(model_formula, data = dataset)
+  ns_model <- stats::glm(model_formula, data = dataset)
 
   return(ns_model)
 }
@@ -53,7 +53,7 @@ model_by_knots <- function(dataset,
     ", knots = ", knots_str, ", Boundary.knots = ", boundary_knots_str, ")")
   model_formula <- stats::as.formula(formula_str)
 
-  ns_model <- stats::lm(model_formula, data = dataset)
+  ns_model <- stats::glm(model_formula, data = dataset)
 
   return(ns_model)
 }

@@ -3,7 +3,7 @@
 \name{choose_splines}
 \alias{choose_splines}
 \title{Chooses the best from a set of natural splines regression models with
-a knot count lower than or equal to a specified maximum number of konts}
+a knot count lower than or equal to a specified maximum number of knots}
 \usage{
 choose_splines(
   dataset,

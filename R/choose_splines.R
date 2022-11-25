@@ -1,5 +1,5 @@
 #' Chooses the best from a set of natural splines regression models with
-#' a knot count lower than or equal to a specified maximum number of konts
+#' a knot count lower than or equal to a specified maximum number of knots
 #'
 #' The maximum number of knots is given as an input argument.
 #' @param dataset The data frame

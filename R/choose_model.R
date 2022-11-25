@@ -1,13 +1,130 @@
 #' Function assessing different types of regression models, returing the one
-#' giving the best results according to an information criterion.
+#' giving the best results according to an information criterion
 #'
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
+#' @param icr_fn The information criterion function (default BIC)
+#' @param fp_alpha The relax factor for multivariate fractional polynomials
+#' @param max_nsknots The max number of knots for natural splines (default 7)
+#' @param max_fp_df The max degrees of freedom for fractional polynomials
+#' (default 7)
+#' @param verbose Verbose output, default TRUE
 #' @return A list with named elements 'model', 'type', 'score'
+#' @importFrom stats glm
+#' @importFrom mfp fp
 #' @export
 #' @examples
 #' my_model <- choose_model(d, y, x)$model
-choose_model <- function(dataset, dependent, independents) {
-    return(NULL)
+choose_model <- function(dataset,
+                        dependent,
+                        independents,
+                        icr_fn = stats::BIC,
+                        fp_alpha = NA,
+                        max_nsknots = 7,
+                        max_fp_df = 4,
+                        verbose = TRUE) {
+  dependent <- rlang::enquo(dependent)
+  independents <- rlang::enquo(independents)
+
+  # Multivariate fractional polynomials (move to separate func)
+  fp_formula <- stats::formula(paste0(
+    rlang::as_name(dependent),
+    " ~ fp(",
+    rlang::as_name(independents),
+    ", df = ",
+    max_fp_df,
+    ")"
+  ))
+  mfp_res <- NA
+  if (is.na(fp_alpha)) {
+    mfp_res <-
+      mfp::mfp(fp_formula, data = dataset, verbose = verbose)
+  } else {
+    mfp_res <-
+      mfp::mfp(fp_formula, alpha = fp_alpha, data = dataset, verbose = verbose)
+  }
+  mfp_mod <- eval(summary(mfp_res)$call)
+  mfp_score <- icr_fn(mfp_mod)
+  if (verbose) {
+    R.utils::printf("Multivariate fractional polynomial score: %f\n", mfp_score)
+  }
+
+  # Natural splines with knots distanced by equally sized bins (quantiles)
+  knotcnt_suggestion <-
+    suggest_knotcount(dataset, !!dependent, !!independents, max_nsknots)
+  ns_mod <- model_by_count(dataset, !!dependent, !!independents,
+    knotcnt_suggestion$nknots)
+  ns_score <- icr_fn(ns_mod)
+
+  if (verbose) {
+    R.utils::printf("Natural splines, knots by quartiles: %f ", ns_score)
+    R.utils::printf("Knot count: %d ", knotcnt_suggestion$nknots)
+    R.utils::printf("Distinct knots: %d\n", length(extract_knots(ns_mod)))
+  }
+
+  # Natural splines with freely placed knots
+  cladina_res <- choose_splines(dataset, !!dependent, !!independents,
+    max_nsknots, icr_fn)
+
+  if (verbose) {
+    R.utils::printf("Natural splines non-uniform placements score: %f\n",
+      cladina_res$score)
+    R.utils::printf("Distinct knots: %d\n", length(cladina_res$knots))
+  }
+
+  if (mfp_score <= ns_score && mfp_score <= cladina_res$score) {
+    ret <- list(model = mfp_mod, type = "mfp", score = mfp_score)
+  } else if (ns_score <= cladina_res$score) {
+    ret <- list(model = ns_mod, type = "ns", score = ns_score)
+  } else {
+    ret <- list(model = cladina_res$model, type = "ns_nu",
+      score = cladina_res$score)
+  }
+
+  if (verbose) {
+    ret_desc <- list(
+      "mfp" = "Multivariate fractional polynomials",
+      "ns_nu" = "Natural splines with non-uniform knot placements",
+      "ns" = "Natural splines with knots distanced by equally sized quantiles")
+    R.utils::printf("Chosen model type: %s\n", ret_desc[[ret$type]])
+  }
+
+  return(ret)
 }
+
+#region code for debugging
+# main <- function() {
+#   library(tidyverse)
+#   library(tidyr)
+#   library(mfp)
+#   library("cladina")
+
+#   d <- read.table(
+#     "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
+#     sep = ",", header = TRUE)
+#   d <- d %>%
+#       drop_na(nwsize) %>%
+#       drop_na(age) %>%
+#       mutate(age_years = 2022 - age, age_dec = age_years / 10)
+
+
+#   # Just to make is the same as the fields in the synthetic data
+#   d$Independent <- d$age_dec
+#   d$Dependent <- d$nwsize
+#   d$SignalMeasured <- d$Dependent
+
+#   # Shuffle the rows
+#   set.seed(7)
+#   d <- d[sample(1:nrow(d)), ]
+
+#   # Bootstrap the data to create a training and a test set
+#   n_split <- trunc(nrow(d) * 0.5)
+#   d_full <- d
+#   d <- d_full[1:n_split, ]
+#   d_test <- d_full[(n_split + 1):nrow(d_full), ]
+
+#   cladina_res <- choose_model(d, nwsize, age_dec, AIC)
+#   cladina_res
+# }
+#endregion

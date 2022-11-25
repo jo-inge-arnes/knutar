@@ -3,9 +3,18 @@
 \name{choose_model}
 \alias{choose_model}
 \title{Function assessing different types of regression models, returing the one
-giving the best results according to an information criterion.}
+giving the best results according to an information criterion}
 \usage{
-choose_model(dataset, dependent, independents)
+choose_model(
+  dataset,
+  dependent,
+  independents,
+  icr_fn = stats::BIC,
+  fp_alpha = NA,
+  max_nsknots = 7,
+  max_fp_df = 4,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{dataset}{The data frame}
@@ -13,13 +22,24 @@ choose_model(dataset, dependent, independents)
 \item{dependent}{The dependent variable in the formula}
 
 \item{independents}{The independent variables in the formula}
+
+\item{icr_fn}{The information criterion function (default BIC)}
+
+\item{fp_alpha}{The relax factor for multivariate fractional polynomials}
+
+\item{max_nsknots}{The max number of knots for natural splines (default 7)}
+
+\item{max_fp_df}{The max degrees of freedom for fractional polynomials
+(default 7)}
+
+\item{verbose}{Verbose output, default TRUE}
 }
 \value{
 A list with named elements 'model', 'type', 'score'
 }
 \description{
 Function assessing different types of regression models, returing the one
-giving the best results according to an information criterion.
+giving the best results according to an information criterion
 }
 \examples{
 my_model <- choose_model(d, y, x)$model
