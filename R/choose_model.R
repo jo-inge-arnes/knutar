@@ -85,9 +85,9 @@ choose_model <- function(dataset,
     R.utils::printf("\n")
   }
 
-  if (mfp_score <= ns_score && mfp_score <= cladina_res$score) {
+  if (mfp_score < ns_score && mfp_score < cladina_res$score) {
     ret <- list(model = mfp_mod, type = "mfp", score = mfp_score)
-  } else if (ns_score <= cladina_res$score) {
+  } else if (ns_score < cladina_res$score) {
     ret <- list(model = ns_mod, type = "ns", score = ns_score)
   } else {
     ret <- list(model = cladina_res$model, type = "ns_nu",
