@@ -11,5 +11,5 @@ print_knots <- function(knot_placements) {
   knots_str <- paste0("[", paste0(knot_placements$knots, collapse = ", "), "]")
   boundary_str <-
     paste0("[", paste0(knot_placements$Boundary.knots, collapse = ", "), "]")
-  R.utils::printf("Knots: %s Boundary knots: %s\n", knots_str, boundary_str)
+  R.utils::printf("Knots: %s\nBoundary knots: %s\n", knots_str, boundary_str)
 }
