@@ -9,7 +9,7 @@ choose_model(
   dataset,
   dependent,
   independents,
-  icr_fn = stats::BIC,
+  icr_fn = stats::AIC,
   fp_alpha = NA,
   max_nsknots = 7,
   max_fp_df = 4,
@@ -23,7 +23,7 @@ choose_model(
 
 \item{independents}{The independent variables in the formula}
 
-\item{icr_fn}{The information criterion function (default BIC)}
+\item{icr_fn}{The information criterion function (default AIC)}
 
 \item{fp_alpha}{The relax factor for multivariate fractional polynomials}
 
@@ -43,4 +43,5 @@ giving the best results according to an information criterion
 }
 \examples{
 my_model <- choose_model(d, y, x)$model
+result <- choose_model(d, y, x, icr_fn = BIC, verbose = TRUE)
 }

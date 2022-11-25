@@ -10,7 +10,7 @@ choose_splines(
   dependent,
   independents,
   max_nknots = 10,
-  icr_fn = stats::BIC,
+  icr_fn = stats::AIC,
   cost_fn = stats::AIC,
   initial_nknots = -1,
   diff_better = 0
@@ -26,7 +26,7 @@ choose_splines(
 \item{max_nknots}{The maximum number of knots wanted}
 
 \item{icr_fn}{The information criterion function comparing models with
-different knot counts (BIC default)}
+different knot counts (AIC default)}
 
 \item{cost_fn}{For comparing different models with equal knot counts
 (default AIC)}
@@ -45,5 +45,5 @@ The maximum number of knots is given as an input argument.
 }
 \examples{
 my_model <- choose_splines(d, y, x, 7)
-my_model <- choose_splines(d, y, x, 7, AIC)
+my_model <- choose_splines(d, y, x, 7, BIC)
 }

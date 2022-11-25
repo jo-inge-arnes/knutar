@@ -4,7 +4,7 @@
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
-#' @param icr_fn The information criterion function (default BIC)
+#' @param icr_fn The information criterion function (default AIC)
 #' @param fp_alpha The relax factor for multivariate fractional polynomials
 #' @param max_nsknots The max number of knots for natural splines (default 7)
 #' @param max_fp_df The max degrees of freedom for fractional polynomials
@@ -16,10 +16,11 @@
 #' @export
 #' @examples
 #' my_model <- choose_model(d, y, x)$model
+#' result <- choose_model(d, y, x, icr_fn = BIC, verbose = TRUE)
 choose_model <- function(dataset,
                         dependent,
                         independents,
-                        icr_fn = stats::BIC,
+                        icr_fn = stats::AIC,
                         fp_alpha = NA,
                         max_nsknots = 7,
                         max_fp_df = 4,
