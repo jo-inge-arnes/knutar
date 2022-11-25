@@ -43,12 +43,9 @@ choose_splines <- function(dataset,
   cur_score <- icr_fn(best_model)
   best_score <- cur_score
   best_knots <- extract_knots(best_model)
+  cur_nknots <- length(best_knots$knots)
 
-  if (length(best_knots) < max_nknots) {
-    max_nknots <- length(best_knots$knots)
-  }
-
-  for (cur_nknots in 1:(max_nknots - 1)) {
+   while (cur_nknots > 0) {
     these_knots <- extract_knots(cur_model)
     chosen <- choose_removal(dataset, !!dependent, !!independents,
       these_knots$knots, these_knots$Boundary.knots, cost_fn)
@@ -60,6 +57,7 @@ choose_splines <- function(dataset,
       best_knots <- extract_knots(best_model)
     }
     cur_model <- chosen$model
+    cur_nknots <- length(extract_knots(cur_model)$knots)
   }
 
   return(
@@ -72,33 +70,42 @@ choose_splines <- function(dataset,
 #   library(tidyr)
 #   library("cladina")
 
-#   d <- read.table(
-#     "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
-#     sep = ",", header = TRUE)
-#   d <- d %>%
-#       drop_na(nwsize) %>%
-#       drop_na(age) %>%
-#       mutate(age_years = 2022 - age, age_dec = age_years / 10)
+#   # d <- read.table(
+#   #   "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
+#   #   sep = ",", header = TRUE)
+#   # d <- d %>%
+#   #     drop_na(nwsize) %>%
+#   #     drop_na(age) %>%
+#   #     mutate(age_years = 2022 - age, age_dec = age_years / 10)
 
 
-#   # Just to make is the same as the fields in the synthetic data
-#   d$Independent <- d$age_dec
-#   d$Dependent <- d$nwsize
-#   d$SignalMeasured <- d$Dependent
+#   # # Just to make is the same as the fields in the synthetic data
+#   # d$Independent <- d$age_dec
+#   # d$Dependent <- d$nwsize
+#   # d$SignalMeasured <- d$Dependent
 
-#   # Shuffle the rows
-#   set.seed(7)
-#   d <- d[sample(1:nrow(d)), ]
+#   # # Shuffle the rows
+#   # set.seed(7)
+#   # d <- d[sample(1:nrow(d)), ]
 
-#   # Bootstrap the data to create a training and a test set
-#   n_split <- trunc(nrow(d) * 0.5)
-#   d_full <- d
-#   d <- d_full[1:n_split, ]
-#   d_test <- d_full[(n_split + 1):nrow(d_full), ]
+#   # # Bootstrap the data to create a training and a test set
+#   # n_split <- trunc(nrow(d) * 0.5)
+#   # d_full <- d
+#   # d <- d_full[1:n_split, ]
+#   # d_test <- d_full[(n_split + 1):nrow(d_full), ]
 
-#   best_global_nknots <- suggest_knotcount(d, nwsize, age_dec)$nknots
+#   # Synthetic data sets
 
-#   cladina_res <- choose_splines(d, nwsize, age_dec, 10,
-#     initial_nknots = best_global_nknots, diff_better = 2)
+#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
+#   file_name_test <- "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
+
+#   d <- read.table(file_name, sep = ",", header = TRUE)
+#   d_test <- read.table(file_name_test, sep = ",", header = TRUE)
+
+#   best_global_nknots <- suggest_knotcount(d, Dependent, Independent)$nknots
+
+#   cladina_res <- choose_splines(d, Dependent, Independent, 10,
+#     initial_nknots = best_global_nknots)
+#   cladina_res
 # }
 #endregion

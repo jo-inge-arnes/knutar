@@ -101,31 +101,39 @@ choose_model <- function(dataset,
 #   library(mfp)
 #   library("cladina")
 
-#   d <- read.table(
-#     "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
-#     sep = ",", header = TRUE)
-#   d <- d %>%
-#       drop_na(nwsize) %>%
-#       drop_na(age) %>%
-#       mutate(age_years = 2022 - age, age_dec = age_years / 10)
+#   # d <- read.table(
+#   #   "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
+#   #   sep = ",", header = TRUE)
+#   # d <- d %>%
+#   #     drop_na(nwsize) %>%
+#   #     drop_na(age) %>%
+#   #     mutate(age_years = 2022 - age, age_dec = age_years / 10)
 
 
-#   # Just to make is the same as the fields in the synthetic data
-#   d$Independent <- d$age_dec
-#   d$Dependent <- d$nwsize
-#   d$SignalMeasured <- d$Dependent
+#   # # Just to make is the same as the fields in the synthetic data
+#   # d$Independent <- d$age_dec
+#   # d$Dependent <- d$nwsize
+#   # d$SignalMeasured <- d$Dependent
 
-#   # Shuffle the rows
-#   set.seed(7)
-#   d <- d[sample(1:nrow(d)), ]
+#   # # Shuffle the rows
+#   # set.seed(7)
+#   # d <- d[sample(1:nrow(d)), ]
 
-#   # Bootstrap the data to create a training and a test set
-#   n_split <- trunc(nrow(d) * 0.5)
-#   d_full <- d
-#   d <- d_full[1:n_split, ]
-#   d_test <- d_full[(n_split + 1):nrow(d_full), ]
+#   # # Bootstrap the data to create a training and a test set
+#   # n_split <- trunc(nrow(d) * 0.5)
+#   # d_full <- d
+#   # d <- d_full[1:n_split, ]
+#   # d_test <- d_full[(n_split + 1):nrow(d_full), ]
 
-#   cladina_res <- choose_model(d, nwsize, age_dec, AIC)
+#   # Synthetic data sets
+
+#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
+#   file_name_test <- "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
+
+#   d <- read.table(file_name, sep = ",", header = TRUE)
+#   d_test <- read.table(file_name_test, sep = ",", header = TRUE)
+
+#   cladina_res <- choose_model(d, Dependent, Independent, AIC)
 #   cladina_res
 # }
 #endregion

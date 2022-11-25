@@ -2,7 +2,7 @@
 % Please edit documentation in R/choose_model.r
 \name{choose_model}
 \alias{choose_model}
-\title{Function assessing different types of regression models, returing the one
+\title{Function assessing different types of regression models, returning the one
 giving the best results according to an information criterion}
 \usage{
 choose_model(
@@ -38,7 +38,7 @@ choose_model(
 A list with named elements 'model', 'type', 'score'
 }
 \description{
-Function assessing different types of regression models, returing the one
+Function assessing different types of regression models, returning the one
 giving the best results according to an information criterion
 }
 \examples{
