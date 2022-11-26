@@ -10,13 +10,44 @@
 #' @param max_fp_df The max degrees of freedom for fractional polynomials
 #' (default 7)
 #' @param verbose Verbose output, default TRUE
-#' @return A list with named elements 'model', 'type', 'score'
+#' @return A list with named elements, such as 'model', 'type', 'score'. The
+#' function returns a list with named elements and sublists, see examples for
+#' full overview of the returned values.
 #' @importFrom stats glm
 #' @importFrom mfp fp
 #' @export
 #' @examples
 #' my_model <- choose_model(d, y, x)$model
 #' result <- choose_model(d, y, x, icr_fn = BIC, verbose = TRUE)
+#'
+#' ret <- choose_model(d, y, x)
+#' ret$model      # The chosen model
+#' ret$score      # The chosen model's score
+#' ret$type       # The type of model chosen as a string
+#v ret$score_name # The type of score used as a string
+#v ret$score_fn   # The function used for scores
+#' ret$labels     # Description string for the types of models
+#'
+#' ret$mfp        # Multivariate fractional polynomial
+#' ret$mfp$model  # The model
+#' ret$mfp$score  # The score
+#'
+#' ret$ns         # Natural splines from quantiles
+#' ret$ns$model   # The model
+#' ret$ns$score   # The score
+#' ret$ns$knot_cnt_arg      # The number of knots (df - 1) as input argument
+#' ret$ns$knot_cnt_distinct # The number of distinct placements in the result
+#' ret$ns$knot_placements   # Knots and boundary knots
+#' ret$ns$knot_placements$knots           # The knot placements as a list
+#' ret$ns$knot_placements$Boundary.knots  # The boundary knots as a list
+#'
+#' ret$ns_nu         # Natural splines non-uniform placements
+#' ret$ns_nu$model   # The model
+#' ret$ns_nu$score   # The score
+#' ret$ns_nu$knot_cnt_distinct # The number of distinct placements in the result
+#' ret$ns_nu$knot_placements   # Knots and boundary knots
+#' ret$ns_nu$knot_placements$knots          # The knot placements as a list
+#' ret$ns_nu$knot_placements$Boundary.knots # The boundary knots as a list
 choose_model <- function(dataset,
                         dependent,
                         independents,
@@ -27,6 +58,14 @@ choose_model <- function(dataset,
                         verbose = TRUE) {
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
+
+  score_type <- deparse(substitute(icr_fn))
+  ret_desc <- list(
+    "mfp" = "Multivariate fractional polynomials",
+    "ns_nu" = "Natural splines with freely placed knots",
+    "ns" = "Natural splines with knots placed at quantiles")
+  ret <-
+    list(labels = ret_desc, score_fn = icr_fn, score_name = score_type)
 
   # Multivariate fractional polynomials (move to separate func)
   fp_formula <- stats::formula(paste0(
@@ -48,11 +87,7 @@ choose_model <- function(dataset,
   mfp_mod <- eval(summary(mfp_res)$call)
   mfp_score <- icr_fn(mfp_mod)
 
-  score_type <- deparse(substitute(icr_fn))
-  ret_desc <- list(
-    "mfp" = "Multivariate fractional polynomials",
-    "ns_nu" = "Natural splines with freely placed knots",
-    "ns" = "Natural splines with knots placed at quantiles")
+  ret <- append(ret, list(mfp = list(model = mfp_mod, score = mfp_score)))
 
   if (verbose) {
     R.utils::printf("-----------------------------------------------------\n")
@@ -66,6 +101,14 @@ choose_model <- function(dataset,
     knotcnt_suggestion$nknots)
   ns_score <- icr_fn(ns_mod)
 
+  extracted_knots <- extract_knots(ns_mod)
+  ret <-
+    append(ret, list(ns =
+      list(model = ns_mod,
+        score = ns_score,
+        knot_cnt_arg = knotcnt_suggestion$nknots,
+        knot_cnt_distinct = length(extracted_knots$knots),
+        knot_placements = extracted_knots)))
 
   if (verbose) {
     R.utils::printf("%s\n%s: %f\n", ret_desc[["ns"]], score_type, ns_score)
@@ -78,6 +121,13 @@ choose_model <- function(dataset,
   cladina_res <- choose_splines(dataset, !!dependent, !!independents,
     max_nsknots, icr_fn)
 
+  ret <-
+    append(ret, list(ns_nu =
+      list(model = cladina_res$model,
+        score = cladina_res$score,
+        knot_cnt_distinct = length(cladina_res$knots$knots),
+        knot_placements = cladina_res$knots)))
+
   if (verbose) {
     R.utils::printf("%s\n%s: %f\n",
       ret_desc[["ns_nu"]], score_type, cladina_res$score)
@@ -86,12 +136,12 @@ choose_model <- function(dataset,
   }
 
   if ((mfp_score <= ns_score) && (mfp_score <= cladina_res$score)) {
-    ret <- list(model = mfp_mod, type = "mfp", score = mfp_score)
+    ret <- append(ret, list(model = mfp_mod, type = "mfp", score = mfp_score))
   } else if (ns_score <= cladina_res$score) {
-    ret <- list(model = ns_mod, type = "ns", score = ns_score)
+    ret <- append(ret, list(model = ns_mod, type = "ns", score = ns_score))
   } else {
-    ret <- list(model = cladina_res$model, type = "ns_nu",
-      score = cladina_res$score)
+    ret <- append(ret, list(model = cladina_res$model, type = "ns_nu",
+      score = cladina_res$score))
   }
 
   if (verbose) {
@@ -140,6 +190,28 @@ choose_model <- function(dataset,
 #   d <- read.table(file_name, sep = ",", header = TRUE)
 #   d_test <- read.table(file_name_test, sep = ",", header = TRUE)
 
-#   cladina_res <- choose_model(d, Dependent, Independent, AIC)
+#   ret <- choose_model(d, Dependent, Independent, AIC, verbose = FALSE)
+
+# #  print(ret$mfp)        # Multivariate fractional polynomial
+#   print(ret$mfp$model)  # The model
+#   print(ret$mfp$score)  # The score
+
+# #  print(ret$ns)         # Natural splines from quantiles
+#   print(ret$ns$model)   # The model
+#   print(ret$ns$score)   # The score
+#   print(ret$ns$knot_cnt_arg)      # The number of knots (df - 1) as input argument
+#   print(ret$ns$knot_cnt_distinct) # The number of distinct placements in the result
+# #  print(ret$ns$knot_placements)   # Knots and boundary knots
+#   print(ret$ns$knot_placements$knots)           # The knot placements as a list
+#   print(ret$ns$knot_placements$Boundary.knots) # The boundary knots as a list
+
+#  # print(ret$ns_nu)         # Natural splines non-uniform placements
+#   print(ret$ns_nu$model)   # The model
+#   print(ret$ns_nu$score)   # The score
+#   print(ret$ns_nu$knot_cnt_distinct) # The number of distinct placements in the result
+# #  print(ret$ns_nu$knot_placements)   # Knots and boundary knots
+#   print(ret$ns_nu$knot_placements$knots)          # The knot placements as a list
+#   print(ret$ns_nu$knot_placements$Boundary.knots) # The boundary knots as a list
+
 # }
 #endregion

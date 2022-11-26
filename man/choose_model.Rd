@@ -35,7 +35,9 @@ choose_model(
 \item{verbose}{Verbose output, default TRUE}
 }
 \value{
-A list with named elements 'model', 'type', 'score'
+A list with named elements, such as 'model', 'type', 'score'. The
+function returns a list with named elements and sublists, see examples for
+full overview of the returned values.
 }
 \description{
 Function assessing different types of regression models, returning the one
@@ -44,4 +46,31 @@ giving the best results according to an information criterion
 \examples{
 my_model <- choose_model(d, y, x)$model
 result <- choose_model(d, y, x, icr_fn = BIC, verbose = TRUE)
+
+ret <- choose_model(d, y, x)
+ret$model      # The chosen model
+ret$score      # The chosen model's score
+ret$type       # The type of model chosen as a string
+ret$labels     # Description string for the types of models
+
+ret$mfp        # Multivariate fractional polynomial
+ret$mfp$model  # The model
+ret$mfp$score  # The score
+
+ret$ns         # Natural splines from quantiles
+ret$ns$model   # The model
+ret$ns$score   # The score
+ret$ns$knot_cnt_arg      # The number of knots (df - 1) as input argument
+ret$ns$knot_cnt_distinct # The number of distinct placements in the result
+ret$ns$knot_placements   # Knots and boundary knots
+ret$ns$knot_placements$knots           # The knot placements as a list
+ret$ns$knot_placements$Boundary.knots  # The boundary knots as a list
+
+ret$ns_nu         # Natural splines non-uniform placements
+ret$ns_nu$model   # The model
+ret$ns_nu$score   # The score
+ret$ns_nu$knot_cnt_distinct # The number of distinct placements in the result
+ret$ns_nu$knot_placements   # Knots and boundary knots
+ret$ns_nu$knot_placements$knots          # The knot placements as a list
+ret$ns_nu$knot_placements$Boundary.knots # The boundary knots as a list
 }
