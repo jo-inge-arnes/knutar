@@ -18,14 +18,19 @@
 #' @export
 #' @examples
 #' my_model <- choose_model(d, y, x)$model
-#' result <- choose_model(d, y, x, icr_fn = BIC, verbose = TRUE)
+#' result <- choose_model(d, y, x, icr_fn = AIC, verbose = FALSE)
 #'
 #' ret <- choose_model(d, y, x)
+#'
+#' ret$labels[[ret$type]] # Human readable name of chosen model type
+#' res[[res$type]] # Gives more values for the chosen model if available
+#'
 #' ret$model      # The chosen model
 #' ret$score      # The chosen model's score
 #' ret$type       # The type of model chosen as a string
-#v ret$score_name # The type of score used as a string
-#v ret$score_fn   # The function used for scores
+#' ret$score_name # The type of score used as a string
+#' ret$score_fn   # The function used for scores
+#'
 #' ret$labels     # Description string for the types of models
 #'
 #' ret$mfp        # Multivariate fractional polynomial
