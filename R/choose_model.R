@@ -23,7 +23,7 @@
 #' ret <- choose_model(d, y, x)
 #'
 #' ret$labels[[ret$type]] # Human readable name of chosen model type
-#' res[[res$type]] # Gives more values for the chosen model if available
+#' ret[[ret$type]]        # Gives more values for the chosen model if available
 #'
 #' ret$model      # The chosen model
 #' ret$score      # The chosen model's score
