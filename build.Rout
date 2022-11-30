@@ -34,10 +34,10 @@ Writing 'choose_model.Rd'
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
-* building ‘cladina_0.0.0.9016.tar.gz’
+* building ‘cladina_0.0.0.9017.tar.gz’
 
 Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/RtmpC46rLN/cladina_0.0.0.9016.tar.gz --install-tests 
+  /tmp/Rtmpxr7faT/cladina_0.0.0.9017.tar.gz --install-tests 
 * installing to library ‘/home/jo/R/x86_64-pc-linux-gnu-library/4.1’
 * installing *source* package ‘cladina’ ...
 ** using staged installation
@@ -53,4 +53,4 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 > 
 > proc.time()
    user  system elapsed 
-  6.839   1.536  17.574 
+  6.894   1.649  17.488 
