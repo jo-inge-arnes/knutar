@@ -11,7 +11,8 @@ suggest_splines(
   independents,
   target_nknots,
   initial_nknots = -1,
-  cost_fn = stats::AIC
+  cost_fn = stats::AIC,
+  all_knots = FALSE
 )
 }
 \arguments{
@@ -27,9 +28,14 @@ suggest_splines(
 result from the function 'suggest_knotcount'}
 
 \item{cost_fn}{The function for the selection criterion score (AIC default)}
+
+\item{all_knots}{If TRUE, then knots for all intermediate models will be
+included in return value. Default is FALSE.}
 }
 \value{
-The suggested natural splines model
+The suggested natural splines model. if all_knots is TRUE, then
+a list with named elements 'model', 'all_knots', and 'Boundary.knots' is
+returned.
 }
 \description{
 The target number of knots for the model is given as an input argument. The

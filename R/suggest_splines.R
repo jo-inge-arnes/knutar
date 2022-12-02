@@ -72,8 +72,8 @@ suggest_splines <- function(dataset,
     knots = final_knots, boundary_knots = boundary_knots)
 
   if (all_knots) {
-    return(list(model = final_mode, all_knots = intermediate_knots,
-      Boundary.knots = boundary_knots)
+    return(list(model = final_mod, all_knots = intermediate_knots,
+      Boundary.knots = boundary_knots))
   } else {
     return(final_mod)
   }
