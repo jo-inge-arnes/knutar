@@ -27,8 +27,8 @@ choose_model(
 \item{icr_fn}{The information criterion function for comparing different
 models with different degress for freedom or knots (default BIC)}
 
-\item{cost_fn}{The information criterion used to compare models with the
-same knot count, as part of removing knots iteratively (default AIC)}
+\item{cost_fn}{The criterion used to choose which knots to remove, passed to
+the function choose_removal. Defaults to AIC.}
 
 \item{fp_alpha}{The relax factor for multivariate fractional polynomials}
 

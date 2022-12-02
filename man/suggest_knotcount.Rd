@@ -10,7 +10,7 @@ suggest_knotcount(
   dependent,
   independents,
   max_nknots = -1,
-  icr_fn = stats::BIC,
+  icr_fn = stats::AIC,
   all_scores = FALSE
 )
 }
@@ -21,7 +21,7 @@ suggest_knotcount(
 
 \item{independents}{The independent variable(s) in the formula}
 
-\item{icr_fn}{The information criterion function. Defaults to BIC}
+\item{icr_fn}{The information criterion function. Defaults to AIC}
 
 \item{all_scores}{If TRUE, all scores are returned in a list 'all_scores'}
 

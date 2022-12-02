@@ -27,10 +27,10 @@ choose_splines(
 \item{max_nknots}{The maximum number of knots wanted}
 
 \item{icr_fn}{The information criterion function comparing models with
-different knot counts (AIC default)}
+different knot counts (BIC default)}
 
-\item{cost_fn}{For comparing different models with equal knot counts
-(default AIC)}
+\item{cost_fn}{The criterion used to choose which knot to remove, used by
+the function 'choose_removal'. Default is AIC.}
 
 \item{initial_nknots}{The initial high number of knots for the algorithm
 (default is the value from the 'suggest_knotcount'-function)}

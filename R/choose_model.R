@@ -6,8 +6,8 @@
 #' @param independents The independent variables in the formula
 #' @param icr_fn The information criterion function for comparing different
 #' models with different degress for freedom or knots (default BIC)
-#' @param cost_fn The information criterion used to compare models with the
-#' same knot count, as part of removing knots iteratively (default AIC)
+#' @param cost_fn The criterion used to choose which knots to remove, passed to
+#' the function choose_removal. Defaults to AIC.
 #' @param fp_alpha The relax factor for multivariate fractional polynomials
 #' @param max_nsknots The max number of knots for natural splines (default 7)
 #' @param max_fp_df The max degrees of freedom for fractional polynomials

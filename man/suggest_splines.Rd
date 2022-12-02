@@ -11,7 +11,6 @@ suggest_splines(
   independents,
   target_nknots,
   initial_nknots = -1,
-  icr_fn = stats::BIC,
   cost_fn = stats::AIC,
   all_knots = FALSE
 )
@@ -28,12 +27,8 @@ suggest_splines(
 \item{initial_nknots}{The number of knots initially, defaults to the
 result from the function 'suggest_knotcount'}
 
-\item{icr_fn}{Information criterion for comparing models with different
-number of knots. Only used for suggestknots when initial_nknots is not set.
-(BIC default)}
-
 \item{cost_fn}{The function for the selection criterion score (AIC default)
-used to compare which knot should be removed}
+used to compare which knot should be removed, passed to choose_removal}
 
 \item{all_knots}{If TRUE, then knots for all intermediate models will be
 included in return value. Default is FALSE.}

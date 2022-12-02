@@ -7,9 +7,9 @@
 #' @param independents The independent variables in the formula
 #' @param max_nknots The maximum number of knots wanted
 #' @param icr_fn The information criterion function comparing models with
-#' different knot counts (AIC default)
-#' @param cost_fn For comparing different models with equal knot counts
-#' (default AIC)
+#' different knot counts (BIC default)
+#' @param cost_fn The criterion used to choose which knot to remove, used by
+#' the function 'choose_removal'. Default is AIC.
 #' @param initial_nknots The initial high number of knots for the algorithm
 #' (default is the value from the 'suggest_knotcount'-function)
 #' @param diff_better How much lower must the score be to make a higher knot
@@ -35,8 +35,7 @@ choose_splines <- function(dataset,
 
   if (initial_nknots == -1) {
     initial_nknots <-
-      suggest_knotcount(dataset, !!dependent, !!independents,
-        icr_fn = icr_fn)$nknots
+      suggest_knotcount(dataset, !!dependent, !!independents)$nknots
   }
 
   upper_model <- suggest_splines(dataset, !!dependent, !!independents,
