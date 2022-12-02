@@ -4,9 +4,10 @@
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variable(s) in the formula
-#' @param maximum_knots The highest knot count to assess. Defaults to 300
-#' @param info_crit The information criterion function. Defaults to AIC
-#' @return A list with named elements 'nknots' and 'score'
+#' @param maximum_knots The highest knot count to assess. Defaults to n / 2
+#' @param icr_fn The information criterion function. Defaults to BIC
+#' @param all_scores If TRUE, all scores are returned in a list 'all_scores'
+#' @return A list with named elements 'nknots', 'score', and 'all_scores'
 #' @importFrom splines ns
 #' @export
 #' @examples
@@ -15,7 +16,8 @@ suggest_knotcount <- function(dataset,
                 dependent,
                 independents,
                 max_nknots = -1,
-                info_crit = stats::AIC) {
+                icr_fn = stats::BIC,
+                all_scores = FALSE) {
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
@@ -25,6 +27,8 @@ suggest_knotcount <- function(dataset,
 
   min_icr <- Inf
   min_ndf <- Inf
+
+  score_list <- list()
 
   for (i in 1:(max_nknots + 1)) {
     model_formula <- stats::formula(paste0(
@@ -37,7 +41,11 @@ suggest_knotcount <- function(dataset,
 
     mod_spline <- stats::glm(model_formula, data = dataset)
 
-    icr_score <- info_crit(mod_spline)
+    icr_score <- icr_fn(mod_spline)
+
+    if (all_scores) {
+      score_list <- append(score_list, list(score = icr_score, n_knots = i - 1))
+    }
 
     if (icr_score < min_icr) {
       min_icr <- icr_score
@@ -45,5 +53,5 @@ suggest_knotcount <- function(dataset,
     }
   }
 
-  return(list(nknots = min_ndf - 1, score = min_icr))
+  return(list(nknots = min_ndf - 1, score = min_icr, all_scores = score_list))
 }

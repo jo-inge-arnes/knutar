@@ -10,6 +10,7 @@ choose_model(
   dependent,
   independents,
   icr_fn = stats::BIC,
+  cost_fn = stats::AIC,
   fp_alpha = NA,
   max_nsknots = 7,
   max_fp_df = 4,
@@ -23,7 +24,11 @@ choose_model(
 
 \item{independents}{The independent variables in the formula}
 
-\item{icr_fn}{The information criterion function (default AIC)}
+\item{icr_fn}{The information criterion function for comparing different
+models with different degress for freedom or knots (default BIC)}
+
+\item{cost_fn}{The information criterion used to compare models with the
+same knot count, as part of removing knots iteratively (default AIC)}
 
 \item{fp_alpha}{The relax factor for multivariate fractional polynomials}
 

@@ -4,7 +4,10 @@
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
-#' @param icr_fn The information criterion function (default AIC)
+#' @param icr_fn The information criterion function for comparing different
+#' models with different degress for freedom or knots (default BIC)
+#' @param cost_fn The information criterion used to compare models with the
+#' same knot count, as part of removing knots iteratively (default AIC)
 #' @param fp_alpha The relax factor for multivariate fractional polynomials
 #' @param max_nsknots The max number of knots for natural splines (default 7)
 #' @param max_fp_df The max degrees of freedom for fractional polynomials
@@ -57,6 +60,7 @@ choose_model <- function(dataset,
                         dependent,
                         independents,
                         icr_fn = stats::BIC,
+                        cost_fn = stats::AIC,
                         fp_alpha = NA,
                         max_nsknots = 7,
                         max_fp_df = 4,
@@ -101,7 +105,8 @@ choose_model <- function(dataset,
 
   # Natural splines with knots distanced by equally sized bins (quantiles)
   knotcnt_suggestion <-
-    suggest_knotcount(dataset, !!dependent, !!independents, max_nsknots)
+    suggest_knotcount(dataset, !!dependent, !!independents, max_nsknots,
+      icr_fn = icr_fn)
   ns_mod <- model_by_count(dataset, !!dependent, !!independents,
     knotcnt_suggestion$nknots)
   ns_score <- icr_fn(ns_mod)
@@ -124,7 +129,7 @@ choose_model <- function(dataset,
 
   # Natural splines with freely placed knots
   cladina_res <- choose_splines(dataset, !!dependent, !!independents,
-    max_nsknots, icr_fn)
+    max_nsknots, icr_fn = icr_fn, cost_fn = cost_fn)
 
   ret <-
     append(ret, list(ns_nu =

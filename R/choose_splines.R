@@ -35,7 +35,8 @@ choose_splines <- function(dataset,
 
   if (initial_nknots == -1) {
     initial_nknots <-
-      suggest_knotcount(dataset, !!dependent, !!independents)$nknots
+      suggest_knotcount(dataset, !!dependent, !!independents,
+        icr_fn = icr_fn)$nknots
   }
 
   upper_model <- suggest_splines(dataset, !!dependent, !!independents,
