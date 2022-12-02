@@ -38,6 +38,8 @@ suggest_splines <- function(dataset,
     initial_nknots <-
       suggest_knotcount(dataset, !!dependent, !!independents)$nknots
   }
+  if (missing(cost_fn)) cost_fn <- stats::AIC
+  if (missing(all_knots)) all_knots <- FALSE
 
   # Find the initial model with a high number of knots, and get the distinct
   # knot placements

@@ -21,9 +21,11 @@ suggest_knotcount <- function(dataset,
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
-  if (max_nknots == -1) {
+  if (missing(max_nknots) || max_nknots == -1) {
     max_nknots <- nrow(dataset) %/% 2
   }
+  if (missing(icr_fn)) icr_fn <- stats::AIC
+  if (missing(all_scores)) all_scores <- FALSE
 
   min_icr <- Inf
   min_ndf <- Inf

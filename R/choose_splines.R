@@ -33,6 +33,14 @@ choose_splines <- function(dataset,
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
 
+
+  if (missing(max_nknots)) max_nknots <- 10
+  if (missing(icr_fn)) icr_fn <- stats::BIC
+  if (missing(cost_fn)) cost_fn <- stats::AIC
+  if (missing(initial_nknots)) initial_nknots <- -1
+  if (missing(diff_better)) diff_better <- 0
+  if (missing(all_models)) all_models <- FALSE
+
   if (initial_nknots == -1) {
     initial_nknots <-
       suggest_knotcount(dataset, !!dependent, !!independents)$nknots

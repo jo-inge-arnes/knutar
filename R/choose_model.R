@@ -68,6 +68,17 @@ choose_model <- function(dataset,
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
+  if (missing(icr_fn)) icr_fn <- stats::BIC
+  if (missing(cost_fn)) cost_fn <- stats::AIC
+  if (missing(fp_alpha)) fp_alpha <- NA
+  if (missing(max_nsknots)) max_nsknots <- 7
+  if (missing(max_fp_df)) max_fp_df <- 4
+  if (missing(verbose)) verbose <- TRUE
+
+
+
+
+
   score_type <- deparse(substitute(icr_fn))
   ret_desc <- list(
     "mfp" = "Multivariate fractional polynomials",
