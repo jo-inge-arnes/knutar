@@ -21,13 +21,15 @@ plot_model <- function(dataset, dependent, independent, model) {
       upr = ilink(fit_link + (2 * se_link)),
       lwr = ilink(fit_link - (2 * se_link)))
 
-  ggplot2::ggplot(d,
+  fig <- ggplot2::ggplot(d,
       ggplot2::aes(x = {{ independent }}, y = {{ dependent }})) +
-  ggplot2::geom_point() +
-  ggplot2::geom_ribbon(data = d,
-    ggplot2::aes(ymin = lwr, ymax = upr), alpha = 0.2) +
-  ggplot2::geom_line(ggplot2::aes(y = pred),
-    color = "blue", size = 1)
+    ggplot2::geom_point() +
+    ggplot2::geom_ribbon(data = d,
+      ggplot2::aes(ymin = lwr, ymax = upr), alpha = 0.2) +
+    ggplot2::geom_line(ggplot2::aes(y = pred),
+      color = "blue", size = 1)
+
+    return(fig)
 }
 
 #region code for debugging
