@@ -13,7 +13,8 @@ choose_splines(
   icr_fn = stats::BIC,
   cost_fn = stats::AIC,
   initial_nknots = -1,
-  diff_better = 0
+  diff_better = 0,
+  all_models = FALSE
 )
 }
 \arguments{
@@ -36,9 +37,12 @@ different knot counts (AIC default)}
 
 \item{diff_better}{How much lower must the score be to make a higher knot
 model be deemed a better model than an alternative lower knot model?}
+
+\item{all_models}{If TRUE, the function will include all intermediate models
+in the results as 'all_models'. Default is FALSE.}
 }
 \value{
-The chosen 'model', 'score', and 'nknots'
+The chosen 'model', 'score', 'nknots', and 'all_models'
 }
 \description{
 The maximum number of knots is given as an input argument.

@@ -14,7 +14,9 @@
 #' (default is the value from the 'suggest_knotcount'-function)
 #' @param diff_better How much lower must the score be to make a higher knot
 #' model be deemed a better model than an alternative lower knot model?
-#' @return The chosen 'model', 'score', and 'nknots'
+#' @param all_models If TRUE, the function will include all intermediate models
+#' in the results as 'all_models'. Default is FALSE.
+#' @return The chosen 'model', 'score', 'nknots', and 'all_models'
 #' @export
 #' @examples
 #' my_model <- choose_splines(d, y, x, 7)
@@ -26,7 +28,8 @@ choose_splines <- function(dataset,
                         icr_fn = stats::BIC,
                         cost_fn = stats::AIC,
                         initial_nknots = -1,
-                        diff_better = 0) {
+                        diff_better = 0,
+                        all_models = FALSE) {
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
 
@@ -44,8 +47,9 @@ choose_splines <- function(dataset,
   best_score <- cur_score
   best_knots <- extract_knots(best_model)
   cur_nknots <- length(best_knots$knots)
+  intermediate_models <- list()
 
-   while (cur_nknots > 0) {
+  while (cur_nknots > 0) {
     these_knots <- extract_knots(cur_model)
     chosen <- choose_removal(dataset, !!dependent, !!independents,
       these_knots$knots, these_knots$Boundary.knots, cost_fn)
@@ -58,10 +62,14 @@ choose_splines <- function(dataset,
     }
     cur_model <- chosen$model
     cur_nknots <- length(extract_knots(cur_model)$knots)
+    if (all_models) {
+      intermediate_models <- append(intermediate_models, cur_model)
+    }
   }
 
   return(
-    list(model = best_model, score = best_score, knots = best_knots))
+    list(model = best_model, score = best_score, knots = best_knots,
+      all_models = intermediate_models))
 }
 
 #region code for debugging
