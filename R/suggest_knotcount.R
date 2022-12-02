@@ -46,7 +46,8 @@ suggest_knotcount <- function(dataset,
     icr_score <- icr_fn(mod_spline)
 
     if (all_scores) {
-      score_list <- append(score_list, list(score = icr_score, n_knots = i - 1))
+      score_list <-
+        append(score_list, list(c(score = icr_score, n_knots = i - 1)))
     }
 
     if (icr_score < min_icr) {
