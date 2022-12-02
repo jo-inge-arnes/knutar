@@ -14,7 +14,11 @@
 #' @param initial_nknots The number of knots initially, defaults to the
 #' result from the function 'suggest_knotcount'
 #' @param cost_fn The function for the selection criterion score (AIC default)
-#' @return The suggested natural splines model
+#' @param all_knots If TRUE, then knots for all intermediate models will be
+#' included in return value. Default is FALSE.
+#' @return The suggested natural splines model. if all_knots is TRUE, then
+#' a list with named elements 'model', 'all_knots', and 'Boundary.knots' is
+#' returned.
 #' @export
 #' @examples
 #' my_model <- suggest_splines(d, y, x, 7)
@@ -24,7 +28,8 @@ suggest_splines <- function(dataset,
                           independents,
                           target_nknots,
                           initial_nknots = -1,
-                          cost_fn = stats::AIC) {
+                          cost_fn = stats::AIC,
+                          all_knots = FALSE) {
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
 
@@ -39,9 +44,15 @@ suggest_splines <- function(dataset,
     model_by_count(dataset, !!dependent, !!independents, initial_nknots)
   knots <- extract_knots(ns_model)
 
+  intermediate_knots <- list()
+
   # Initialize the variables that will hold the final knot placements
   final_knots <- knots$knots
   boundary_knots <- knots$Boundary.knots
+
+  if (all_knots) {
+    intermediate_knots <- append(intermediate_knots, list(final_knots))
+  }
 
   # As long as there are more knots left than the target number, remove knots
   # one by one, by always removing the knot that gives the best resulting model
@@ -50,11 +61,20 @@ suggest_splines <- function(dataset,
       rm_index <- choose_removal(dataset, !!dependent, !!independents,
         knots = final_knots, boundary_knots = boundary_knots, cost_fn)$index
       final_knots <- final_knots[-rm_index]
+
+      if (all_knots) {
+        intermediate_knots <- append(intermediate_knots, list(final_knots))
+      }
     }
   }
 
   final_mod <- model_by_knots(dataset, !!dependent, !!independents,
     knots = final_knots, boundary_knots = boundary_knots)
 
-  return(final_mod)
+  if (all_knots) {
+    return(list(model = final_mode, all_knots = intermediate_knots,
+      Boundary.knots = boundary_knots)
+  } else {
+    return(final_mod)
+  }
 }
