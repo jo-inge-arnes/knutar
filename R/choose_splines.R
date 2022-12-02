@@ -63,7 +63,7 @@ choose_splines <- function(dataset,
     cur_model <- chosen$model
     cur_nknots <- length(extract_knots(cur_model)$knots)
     if (all_models) {
-      intermediate_models <- append(intermediate_models, cur_model)
+      intermediate_models <- append(intermediate_models, list(cur_model))
     }
   }
 
