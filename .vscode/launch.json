@@ -27,7 +27,7 @@
             "workingDirectory": "${workspaceFolder}",
             "file": "${file}",
             "mainFunction": "main",
-            "allowGlobalDebugging": false
+            "allowGlobalDebugging": true
         },
         {
             "type": "R-Debugger",

@@ -13,8 +13,11 @@
 model_by_count <- function(dataset, dependent, independents, nknots) {
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
+
+  independents_str <- sub("~", "", deparse(independents))
+
   model_formula <- stats::as.formula(
-    paste0(rlang::as_name(dependent), " ~ ns(", rlang::as_name(independents),
+    paste0(rlang::as_name(dependent), " ~ ns(", independents_str,
     ", df = ", nknots + 1, ")"))
 
   ns_model <- stats::glm(model_formula, data = dataset)
@@ -44,12 +47,14 @@ model_by_knots <- function(dataset,
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
 
+  independents_str <- sub("~", "", deparse(independents))
+
   knots_str <- paste0(
     "c(", paste0(knots, collapse = ", "), ")")
   boundary_knots_str <- paste0(
     "c(", paste0(boundary_knots, collapse = ", "), ")")
   formula_str <- paste0(
-    rlang::as_name(dependent), " ~ ns(", rlang::as_name(independents),
+    rlang::as_name(dependent), " ~ ns(", independents_str,
     ", knots = ", knots_str, ", Boundary.knots = ", boundary_knots_str, ")")
   model_formula <- stats::as.formula(formula_str)
 
@@ -57,3 +62,27 @@ model_by_knots <- function(dataset,
 
   return(ns_model)
 }
+
+#region code for debugging
+# main <- function() {
+#   library(tidyverse)
+#   library(tidyr)
+#   library(splines)
+#   library("cladina")
+
+#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
+#   file_name_test <-
+#     "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
+
+#   d <- read.table(file_name, sep = ",", header = TRUE)
+
+#   print("Hello")
+
+#   mod <- model_by_count(d, DependentRaw, SignalRaw + Noise, 7)
+#   mod <- model_by_knots(d, DependentRaw, SignalRaw + Noise,
+#     c(0.1, 0.2), c(-1, 1))
+
+
+#   mod
+# }
+#endregion

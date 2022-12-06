@@ -17,9 +17,9 @@
 #' used to compare which knot should be removed, passed to choose_removal
 #' @param all_knots If TRUE, then knots for all intermediate models will be
 #' included in return value. Default is FALSE.
-#' @return The suggested natural splines model. if all_knots is TRUE, then
-#' a list with named elements 'model', 'all_knots', and 'Boundary.knots' is
-#' returned.
+#' @return Returns the suggested natural splines model, or if the 'all_knots'
+#' argument was TRUE, then a list with named elements 'model', 'all_knots', and
+#' 'Boundary.knots' is returned.
 #' @export
 #' @examples
 #' my_model <- suggest_splines(d, y, x, 7)

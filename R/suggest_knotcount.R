@@ -30,7 +30,8 @@ suggest_knotcount <- function(dataset,
   min_icr <- Inf
   min_ndf <- Inf
 
-  score_list <- list()
+  n_knots <- list()
+  scores <- list()
 
   for (i in 1:(max_nknots + 1)) {
     model_formula <- stats::formula(paste0(
@@ -46,8 +47,8 @@ suggest_knotcount <- function(dataset,
     icr_score <- icr_fn(mod_spline)
 
     if (all_scores) {
-      score_list <-
-        append(score_list, list(c(score = icr_score, n_knots = i - 1)))
+      scores <- append(scores, icr_score)
+      n_knots <- append(n_knots, i - 1)
     }
 
     if (icr_score < min_icr) {
@@ -56,5 +57,6 @@ suggest_knotcount <- function(dataset,
     }
   }
 
-  return(list(nknots = min_ndf - 1, score = min_icr, all_scores = score_list))
+  return(list(nknots = min_ndf - 1, score = min_icr,
+    all_scores = list(scores = scores, n_knots = n_knots)))
 }

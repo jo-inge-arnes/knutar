@@ -34,9 +34,9 @@ used to compare which knot should be removed, passed to choose_removal}
 included in return value. Default is FALSE.}
 }
 \value{
-The suggested natural splines model. if all_knots is TRUE, then
-a list with named elements 'model', 'all_knots', and 'Boundary.knots' is
-returned.
+Returns the suggested natural splines model, or if the 'all_knots'
+argument was TRUE, then a list with named elements 'model', 'all_knots', and
+'Boundary.knots' is returned.
 }
 \description{
 The target number of knots for the model is given as an input argument. The
