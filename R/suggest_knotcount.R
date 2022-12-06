@@ -33,11 +33,13 @@ suggest_knotcount <- function(dataset,
   n_knots <- list()
   scores <- list()
 
+independents_str <- sub("~", "", deparse(independents))
+
   for (i in 1:(max_nknots + 1)) {
     model_formula <- stats::formula(paste0(
         rlang::as_name(dependent),
         " ~ ns(",
-        rlang::as_name(independents),
+        independents_str,
         ", df = ",
         i,
         ")"))

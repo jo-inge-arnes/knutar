@@ -75,10 +75,6 @@ choose_model <- function(dataset,
   if (missing(max_fp_df)) max_fp_df <- 4
   if (missing(verbose)) verbose <- TRUE
 
-
-
-
-
   score_type <- deparse(substitute(icr_fn))
   ret_desc <- list(
     "mfp" = "Multivariate fractional polynomials",
@@ -87,11 +83,13 @@ choose_model <- function(dataset,
   ret <-
     list(labels = ret_desc, score_fn = icr_fn, score_name = score_type)
 
+  independents_str <- sub("~", "", deparse(independents))
+
   # Multivariate fractional polynomials (move to separate func)
   fp_formula <- stats::formula(paste0(
     rlang::as_name(dependent),
     " ~ fp(",
-    rlang::as_name(independents),
+    independents_str,
     ", df = ",
     max_fp_df,
     ")"
