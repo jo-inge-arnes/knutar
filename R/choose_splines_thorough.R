@@ -77,7 +77,7 @@ remove_knots <- function(d,
 #' @param verbose Print output about progress and results (Default TRUE)
 #' @return The resulting 'model', 'score', etc. of the best scoring model, and
 #' lists with information about the other assessed models. See examples.
-#' @importFrom lazyeval fn_eval
+#' @importFrom lazyeval f_eval
 #' @export
 #' @examples
 #' my_model <- choose_splines_thorough(d, y, x)$model
