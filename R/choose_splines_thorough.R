@@ -161,7 +161,7 @@ choose_splines_thorough <- function(d,
     knots, b_knots, max_nknots, icr_fn, cost_fn)
 
   unique_score <- icr_fn(unique_mod)
-  unique_knots <- extracted_knots(unique_mod)
+  unique_knots <- extract_knots(unique_mod)
   unique_knots_cnt <- length(unique_knots$knots)
 
   if (verbose) {
@@ -204,7 +204,7 @@ choose_splines_thorough <- function(d,
     knots, b_knots, max_nknots, icr_fn, cost_fn)
 
   uniform_score <- icr_fn(uniform_mod)
-  uniform_knots <- extracted_knots(uniform_mod)
+  uniform_knots <- extract_knots(uniform_mod)
   uniform_knots_cnt <- length(uniform_knots$knots)
 
   if (verbose) {
@@ -234,15 +234,15 @@ choose_splines_thorough <- function(d,
   }
 
   mod <- model_by_count(d,  !!dependent, !!independents, suggested_knot_cnt)
-  extracted_knots <- extract_knots(mod)
-  knots <- extracted_knots$knots
-  b_knots <- extracted_knots$Boundary.knots
+  extract_knots <- extract_knots(mod)
+  knots <- extract_knots$knots
+  b_knots <- extract_knots$Boundary.knots
   quantile_mod <-
     remove_knots(d, !!dependent, !!independents, knots, b_knots, max_nknots,
       icr_fn, cost_fn)
 
   quantile_score <- icr_fn(quantile_mod)
-  quantile_knots <- extracted_knots(quantile_mod)
+  quantile_knots <- extract_knots(quantile_mod)
   quantile_knots_cnt <- length(quantile_knots$knots)
 
   if (verbose) {

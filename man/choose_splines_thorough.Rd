@@ -17,6 +17,8 @@ choose_splines_thorough(
 )
 }
 \arguments{
+\item{d}{The data frame}
+
 \item{dependent}{The dependent variable in the formula}
 
 \item{independents}{The independent variables in the formula}
@@ -30,8 +32,6 @@ different knot counts (BIC default)}
 the function 'choose_removal'. Default is AIC.}
 
 \item{verbose}{Print output about progress and results (Default TRUE)}
-
-\item{dataset}{The data frame}
 }
 \value{
 The resulting 'model', 'score', etc. of the best scoring model, and
