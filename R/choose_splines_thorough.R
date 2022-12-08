@@ -66,7 +66,7 @@ remove_knots <- function(d,
 #' maximum number of knots.
 #'
 #' The maximum number of knots is given as an input argument.
-#' @param dataset The data frame
+#' @param d The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
 #' @param max_nknots The maximum number of knots wanted
