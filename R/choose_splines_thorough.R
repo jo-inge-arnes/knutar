@@ -146,17 +146,17 @@ choose_splines_thorough <- function(d,
               from_best_quantile_knots = from_best_quantile_knots_mod))
 }
 
-main <- function() {
-  library(ggplot2)
-  library("cladina")
+# main <- function() {
+#   library(ggplot2)
+#   library("cladina")
 
-  file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
-  file_name_test <-
-    "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
+#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
+#   file_name_test <-
+#     "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
 
-  d <- read.table(file_name, sep = ",", header = TRUE)
+#   d <- read.table(file_name, sep = ",", header = TRUE)
 
-  choose_splines_thorough(d, Dependent, Independent)
+#   choose_splines_thorough(d, Dependent, Independent)
 
-  print("ferdig")
-}
+#   print("ferdig")
+# }
