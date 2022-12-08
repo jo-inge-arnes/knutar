@@ -34,10 +34,10 @@ Writing 'choose_splines_thorough.Rd'
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
-* building ‘cladina_0.0.0.9051.tar.gz’
+* building ‘cladina_0.0.0.9053.tar.gz’
 
 Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/RtmpeqRyFS/cladina_0.0.0.9051.tar.gz --install-tests 
+  /tmp/Rtmp4zXZ1g/cladina_0.0.0.9053.tar.gz --install-tests 
 * installing to library ‘/home/jo/R/x86_64-pc-linux-gnu-library/4.1’
 * installing *source* package ‘cladina’ ...
 ** using staged installation
@@ -53,4 +53,4 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 > 
 > proc.time()
    user  system elapsed 
-  5.425   3.572  17.584 
+  5.444   3.984  18.075 

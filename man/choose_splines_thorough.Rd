@@ -52,6 +52,8 @@ ret[[ret$type]]        # Gives more values for the chosen model if available
 ret$model      # The chosen model
 ret$score      # The chosen model's score
 ret$type       # The type of model chosen as a string
+ret$nknots     # The number of knots
+ret$knots      # The 'knots' and 'Boundary.knots'
 ret$score_name # The type of score used as a string
 ret$score_fn   # The function used for scores
 

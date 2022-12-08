@@ -34,14 +34,14 @@ remove_knots <- function(d,
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
-  mod <- model_by_knots(d, !!dependent, !!independents, knots, b_knots)
-
-  nknots <- length(knots)
-  chosen_model <- mod
-  final_model <- mod
-  final_score <- Inf
-
   suppressWarnings({
+    mod <- model_by_knots(d, !!dependent, !!independents, knots, b_knots)
+
+    nknots <- length(knots)
+    chosen_model <- mod
+    final_model <- mod
+    final_score <- Inf
+
     while (nknots > 0) {
       del_candidate <- choose_removal(d, !!dependent, !!independents,
         knots, b_knots)
@@ -91,6 +91,8 @@ remove_knots <- function(d,
 #' ret$model      # The chosen model
 #' ret$score      # The chosen model's score
 #' ret$type       # The type of model chosen as a string
+#' ret$nknots     # The number of knots
+#' ret$knots      # The 'knots' and 'Boundary.knots'
 #' ret$score_name # The type of score used as a string
 #' ret$score_fn   # The function used for scores
 #'
@@ -114,7 +116,7 @@ choose_splines_thorough <- function(d,
                                     cost_fn = stats::AIC,
                                     verbose = TRUE) {
   if (missing(icr_fn)) icr_fn <- stats::BIC
-  if (missing(cost_fn)) icr_fn <- stats::AIC
+  if (missing(cost_fn)) cost_fn <- stats::AIC
   if (missing(max_nknots)) max_nknots <- 7
   if (missing(verbose)) verbose <- TRUE
 
@@ -165,7 +167,7 @@ choose_splines_thorough <- function(d,
   unique_knots_cnt <- length(unique_knots$knots)
 
   if (verbose) {
-    R.utils::printf("The resulting model's %s score was %f, with %d knots.\n",
+    R.utils::printf("The resulting %s score was %f, with %d knots.\n",
       score_type, unique_score, unique_knots_cnt)
     R.utils::printf("-----------------------------------------------------\n")
   }
@@ -208,7 +210,7 @@ choose_splines_thorough <- function(d,
   uniform_knots_cnt <- length(uniform_knots$knots)
 
   if (verbose) {
-    R.utils::printf("The resulting model's %s score was %f, with %d knots.\n",
+    R.utils::printf("The resulting %s score was %f, with %d knots.\n",
       score_type, uniform_score, uniform_knots_cnt)
     R.utils::printf("-----------------------------------------------------\n")
   }
@@ -230,7 +232,7 @@ choose_splines_thorough <- function(d,
       score_type)
     R.utils::printf(
       "for [0, %d] knots, which had %d knots and a score of %f.\n",
-      dist, max_nknots, suggested_nknots_res$score)
+      max_nknots, suggested_knot_cnt, suggested_nknots_res$score)
   }
 
   mod <- model_by_count(d,  !!dependent, !!independents, suggested_knot_cnt)
@@ -257,19 +259,21 @@ choose_splines_thorough <- function(d,
 
   if ((quantile_score <= unique_score) && (quantile_score <= uniform_score)) {
     ret <- append(ret,
-      list(model = quantile_mod, type = "quantile", score = quantile_score))
+      list(model = quantile_mod, type = "quantile", score = quantile_score,
+        nknots = quantile_knots_cnt, knots = quantile_knots))
   } else if (unique_score <= uniform_score) {
     ret <- append(ret,
-      list(model = unique_mod, type = "distinct", score = unique_score))
+      list(model = unique_mod, type = "distinct", score = unique_score,
+        nknots = unique_knots_cnt, knots = unique_knots))
   } else {
     ret <- append(ret, list(model = uniform_mod, type = "uniform",
-      score = uniform_score))
+      score = uniform_score, nknots = uniform_knots_cnt, knots = uniform_knots))
   }
 
   if (verbose) {
     R.utils::printf(
       "The chosen model was of type '%s' with %s = %f and %d knots.\n",
-      ret$type, score_type, unique_score, unique_knots_cnt)
+      ret$type, ret$score_name, ret$score, unique_knots_cnt)
   }
 
   return(ret)
