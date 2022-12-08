@@ -34,7 +34,8 @@ the function 'choose_removal'. Default is AIC.}
 \item{dataset}{The data frame}
 }
 \value{
-List of models
+The resulting 'model', 'score', etc. of the best scoring model, and
+lists with information about the other assessed models. See examples.
 }
 \description{
 The maximum number of knots is given as an input argument.
@@ -56,24 +57,14 @@ ret$score_fn   # The function used for scores
 
 ret$labels     # Description string for the types of models
 
-ret$quantile   # Multivariate fractional polynomial
+ret$quantile        # Model obtained from a start model based on quantiles
 ret$quantile$model  # The model
 ret$quantile$score  # The score
+ret$quantile$nknots     # The number of knots
+ret$quantile$knots      # Knots and boundary knots locations
+ret$quantile$knots$knots          # Knot locations in a list
+ret$quantile$knots$Boundary.knots  # Boundary knot locations in a list
 
-ret$ns         # Natural splines from quantiles
-ret$ns$model   # The model
-ret$ns$score   # The score
-ret$ns$knot_cnt_arg      # The number of knots (df - 1) as input argument
-ret$ns$knot_cnt_distinct # The number of distinct placements in the result
-ret$ns$knot_placements   # Knots and boundary knots
-ret$ns$knot_placements$knots           # The knot placements as a list
-ret$ns$knot_placements$Boundary.knots  # The boundary knots as a list
-
-ret$ns_nu         # Natural splines non-uniform placements
-ret$ns_nu$model   # The model
-ret$ns_nu$score   # The score
-ret$ns_nu$knot_cnt_distinct # The number of distinct placements in the result
-ret$ns_nu$knot_placements   # Knots and boundary knots
-ret$ns_nu$knot_placements$knots          # The knot placements as a list
-ret$ns_nu$knot_placements$Boundary.knots # The boundary knots as a list
+res$uniform
+res$distinct
 }
