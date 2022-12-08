@@ -12,7 +12,8 @@ choose_splines_thorough(
   independents,
   max_nknots = 7,
   icr_fn = stats::BIC,
-  cost_fn = stats::AIC
+  cost_fn = stats::AIC,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ different knot counts (BIC default)}
 \item{cost_fn}{The criterion used to choose which knot to remove, used by
 the function 'choose_removal'. Default is AIC.}
 
+\item{verbose}{Print output about progress and results (Default TRUE)}
+
 \item{dataset}{The data frame}
 }
 \value{
@@ -35,4 +38,42 @@ List of models
 }
 \description{
 The maximum number of knots is given as an input argument.
+}
+\examples{
+my_model <- choose_splines_thorough(d, y, x)$model
+result <- choose_splines_thorough(d, y, x, icr_fn = AIC, verbose = FALSE)
+
+ret <- choose_splines_thorough(d, y, x)
+
+ret$labels[[ret$type]] # Human readable name of chosen model type
+ret[[ret$type]]        # Gives more values for the chosen model if available
+
+ret$model      # The chosen model
+ret$score      # The chosen model's score
+ret$type       # The type of model chosen as a string
+ret$score_name # The type of score used as a string
+ret$score_fn   # The function used for scores
+
+ret$labels     # Description string for the types of models
+
+ret$quantile   # Multivariate fractional polynomial
+ret$quantile$model  # The model
+ret$quantile$score  # The score
+
+ret$ns         # Natural splines from quantiles
+ret$ns$model   # The model
+ret$ns$score   # The score
+ret$ns$knot_cnt_arg      # The number of knots (df - 1) as input argument
+ret$ns$knot_cnt_distinct # The number of distinct placements in the result
+ret$ns$knot_placements   # Knots and boundary knots
+ret$ns$knot_placements$knots           # The knot placements as a list
+ret$ns$knot_placements$Boundary.knots  # The boundary knots as a list
+
+ret$ns_nu         # Natural splines non-uniform placements
+ret$ns_nu$model   # The model
+ret$ns_nu$score   # The score
+ret$ns_nu$knot_cnt_distinct # The number of distinct placements in the result
+ret$ns_nu$knot_placements   # Knots and boundary knots
+ret$ns_nu$knot_placements$knots          # The knot placements as a list
+ret$ns_nu$knot_placements$Boundary.knots # The boundary knots as a list
 }

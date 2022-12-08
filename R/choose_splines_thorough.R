@@ -61,9 +61,9 @@ remove_knots <- function(d,
   return(final_model)
 }
 
-#' Uses several approaches to find the best of a set of natural cubic splines 
-#' regression models with a knot count lower than or equal to a specified 
-#' maximum number of knots. 
+#' Uses several approaches to find the best of a set of natural cubic splines
+#' regression models with a knot count lower than or equal to a specified
+#' maximum number of knots.
 #'
 #' The maximum number of knots is given as an input argument.
 #' @param dataset The data frame
@@ -74,22 +74,78 @@ remove_knots <- function(d,
 #' different knot counts (BIC default)
 #' @param cost_fn The criterion used to choose which knot to remove, used by
 #' the function 'choose_removal'. Default is AIC.
+#' @param verbose Print output about progress and results (Default TRUE)
 #' @return List of models
 #' @export
 #' @examples
-#' 
+#' my_model <- choose_splines_thorough(d, y, x)$model
+#' result <- choose_splines_thorough(d, y, x, icr_fn = AIC, verbose = FALSE)
+#'
+#' ret <- choose_splines_thorough(d, y, x)
+#'
+#' ret$labels[[ret$type]] # Human readable name of chosen model type
+#' ret[[ret$type]]        # Gives more values for the chosen model if available
+#'
+#' ret$model      # The chosen model
+#' ret$score      # The chosen model's score
+#' ret$type       # The type of model chosen as a string
+#' ret$score_name # The type of score used as a string
+#' ret$score_fn   # The function used for scores
+#'
+#' ret$labels     # Description string for the types of models
+#'
+#' ret$quantile   # Multivariate fractional polynomial
+#' ret$quantile$model  # The model
+#' ret$quantile$score  # The score
+#'
+#' ret$ns         # Natural splines from quantiles
+#' ret$ns$model   # The model
+#' ret$ns$score   # The score
+#' ret$ns$knot_cnt_arg      # The number of knots (df - 1) as input argument
+#' ret$ns$knot_cnt_distinct # The number of distinct placements in the result
+#' ret$ns$knot_placements   # Knots and boundary knots
+#' ret$ns$knot_placements$knots           # The knot placements as a list
+#' ret$ns$knot_placements$Boundary.knots  # The boundary knots as a list
+#'
+#' ret$ns_nu         # Natural splines non-uniform placements
+#' ret$ns_nu$model   # The model
+#' ret$ns_nu$score   # The score
+#' ret$ns_nu$knot_cnt_distinct # The number of distinct placements in the result
+#' ret$ns_nu$knot_placements   # Knots and boundary knots
+#' ret$ns_nu$knot_placements$knots          # The knot placements as a list
+#' ret$ns_nu$knot_placements$Boundary.knots # The boundary knots as a list
 choose_splines_thorough <- function(d,
                                     dependent,
                                     independents,
                                     max_nknots = 7,
                                     icr_fn = stats::BIC,
-                                    cost_fn = stats::AIC) {
+                                    cost_fn = stats::AIC,
+                                    verbose = TRUE) {
   if (missing(icr_fn)) icr_fn <- stats::BIC
   if (missing(cost_fn)) icr_fn <- stats::AIC
   if (missing(max_nknots)) max_nknots <- 7
+  if (missing(verbose)) verbose <- TRUE
+
+  if (verbose) {
+    R.utils::printf(
+      "Assessing several approaches to finding a model suggestion ")
+    R.utils::printf(
+      "with at most %d knots. Warning: This may take a while...\n", max_nknots)
+    R.utils::printf("-----------------------------------------------------\n")
+  }
+
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
+  score_type <- deparse(substitute(icr_fn))
+  ret_desc <- list(
+    "uniform" = "The start model was based on uniformly distanced knots",
+    "distinct" = "The start model was based on one knot per distict value",
+    "quantile" = "The start model was based on the best scoring quantile size")
+  ret <-
+    list(labels = ret_desc, score_fn = icr_fn, score_name = score_type)
+
+  # Evaluate the right-hand sided formula which represents the X values
   independents_evaluated <- lazyeval::f_eval(independents, data = d)
 
   b_knots <- c(min(independents_evaluated), max(independents_evaluated))
@@ -98,17 +154,45 @@ choose_splines_thorough <- function(d,
   w <- b_knots[[2]] - b_knots[[1]]
 
   # ----------------------------------------------------------------------------
-  # One knot per unique value
-  # ----------------------------------------------------------------------------  
+  # One knot per distinct value
+  # ----------------------------------------------------------------------------
+  if (verbose) {
+    R.utils::printf("Finding model from a start model with one knot per ")
+    R.utils::printf("distinct value. The number of distict values is %d.\n",
+      n_unique)
+  }
+
   knots <- unique_x[2:(n_unique - 1)]
-  from_unique_vals_mod <- remove_knots(d, !!dependent, !!independents, knots, b_knots,
-    max_nknots, icr_fn, cost_fn)
+
+  # Find best model with 'max_nknots' knots
+  unique_mod <- remove_knots(d, !!dependent, !!independents,
+    knots, b_knots, max_nknots, icr_fn, cost_fn)
+
+  unique_score <- icr_fn(unique_mod)
+  unique_knots <- extracted_knots(unique_mod)
+  unique_knots_cnt <- length(unique_knots$knots)
+
+  if (verbose) {
+    R.utils::printf("The resulting model's %s score was %f, with %d knots.\n",
+      score_type, unique_score, unique_knots_cnt)
+    R.utils::printf("-----------------------------------------------------\n")
+  }
+
+  ret <- append(ret,
+    list(distinct = list(model = unique_mod, score = unique_score,
+      nknots = unique_knots_cnt, knots = unique_knots)))
 
   # ----------------------------------------------------------------------------
   # Uniform distances with merged empty intervals
-  # ----------------------------------------------------------------------------  
-  knots <- 
-    seq(from = b_knots[[1]], to = b_knots[[2]], by = (w / (n_unique - 1)))
+  # ----------------------------------------------------------------------------
+  dist <- w / (n_unique - 1)
+  knots <-
+    seq(from = b_knots[[1]], to = b_knots[[2]], by = dist)
+
+  if (verbose) {
+    R.utils::printf("Finding model from a start model with uniform distances ")
+    R.utils::printf("of %f between each knot.\n", dist)
+  }
 
   # Remove empty intervals
   i <- 2
@@ -122,28 +206,81 @@ choose_splines_thorough <- function(d,
 
   # Knots without the boundary knots already present in b_knots
   knots <- knots[2:(length(knots) - 1)]
-  n_knots <- length(knots)
 
-  from_uniform_distances_mod <- remove_knots(d, !!dependent, !!independents, knots, b_knots,
-    max_nknots, icr_fn, cost_fn)
+  # Find best model with at most 'max_nknots' knots
+  uniform_mod <- remove_knots(d, !!dependent, !!independents,
+    knots, b_knots, max_nknots, icr_fn, cost_fn)
+
+  uniform_score <- icr_fn(uniform_mod)
+  uniform_knots <- extracted_knots(uniform_mod)
+  uniform_knots_cnt <- length(uniform_knots$knots)
+
+  if (verbose) {
+    R.utils::printf("The resulting model's %s score was %f, with %d knots.\n",
+      score_type, uniform_score, uniform_knots_cnt)
+    R.utils::printf("-----------------------------------------------------\n")
+  }
+
+  ret <- append(ret,
+    list(uniform = list(model = uniform_mod, score = uniform_score,
+      nknots = uniform_knots_cnt, knots = uniform_knots)))
 
   # ----------------------------------------------------------------------------
   # Start with best knot count obtained for various same-sized quantiles
-  # ----------------------------------------------------------------------------  
-  suggested_knot_cnt <- 
-    suggest_knotcount(d, Dependent, Independent, n_unique)$nknots
-  mod <- model_by_count(d, Dependent, Independent, suggested_knot_cnt)
+  # ----------------------------------------------------------------------------
+  max_nknots <- nrow(d) %/% 2
+  suggested_nknots_res <- suggest_knotcount(d, !!dependent, !!independents,
+    max_nknots = max_nknots, icr_fn = icr_fn)
+  suggested_knot_cnt <- suggested_nknots_res$nknots
+
+  if (verbose) {
+    R.utils::printf("Finding model from a start model with the best %s ",
+      score_type)
+    R.utils::printf(
+      "for [0, %d] knots, which had %d knots and a score of %f.\n",
+      dist, max_nknots, suggested_nknots_res$score)
+  }
+
+  mod <- model_by_count(d,  !!dependent, !!independents, suggested_knot_cnt)
   extracted_knots <- extract_knots(mod)
   knots <- extracted_knots$knots
   b_knots <- extracted_knots$Boundary.knots
-
-  from_best_quantile_knots_mod <- 
-    remove_knots(d, !!dependent, !!independents, knots, b_knots, max_nknots, 
+  quantile_mod <-
+    remove_knots(d, !!dependent, !!independents, knots, b_knots, max_nknots,
       icr_fn, cost_fn)
 
-  return(list(from_unique_vals = from_unique_vals_mod,
-              from_uniform_dists = from_uniform_distances_mod,
-              from_best_quantile_knots = from_best_quantile_knots_mod))
+  quantile_score <- icr_fn(quantile_mod)
+  quantile_knots <- extracted_knots(quantile_mod)
+  quantile_knots_cnt <- length(quantile_knots$knots)
+
+  if (verbose) {
+    R.utils::printf("The resulting model's %s score was %f, with %d knots.\n",
+      score_type, quantile_score, quantile_knots_cnt)
+    R.utils::printf("-----------------------------------------------------\n")
+  }
+
+  ret <- append(ret,
+    list(quantile = list(model = quantile_mod, score = quantile_score,
+      nknots = quantile_knots_cnt, knots = quantile_knots)))
+
+  if ((quantile_score <= unique_score) && (quantile_score <= uniform_score)) {
+    ret <- append(ret,
+      list(model = quantile_mod, type = "quantile", score = quantile_score))
+  } else if (unique_score <= uniform_score) {
+    ret <- append(ret,
+      list(model = unique_mod, type = "distinct", score = unique_score))
+  } else {
+    ret <- append(ret, list(model = uniform_mod, type = "uniform",
+      score = uniform_score))
+  }
+
+  if (verbose) {
+    R.utils::printf(
+      "The chosen model was of type '%s' with %s = %f and %d knots.\n",
+      ret$type, score_type, unique_score, unique_knots_cnt)
+  }
+
+  return(ret)
 }
 
 # main <- function() {
