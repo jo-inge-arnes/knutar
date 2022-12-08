@@ -3,6 +3,7 @@
 export(choose_model)
 export(choose_removal)
 export(choose_splines)
+export(choose_splines_thorough)
 export(extract_knots)
 export(model_by_count)
 export(model_by_knots)

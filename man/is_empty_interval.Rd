@@ -4,12 +4,10 @@
 \alias{is_empty_interval}
 \title{Check if the subinterval <a, b] for a variable is empty}
 \usage{
-is_empty_interval(d, v, a, b)
+is_empty_interval(v, a, b)
 }
 \arguments{
-\item{d}{The dataset}
-
-\item{v}{The variable}
+\item{v}{A list with the variable's values}
 
 \item{a}{The lower, exclusive limit}
 
