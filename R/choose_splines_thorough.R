@@ -115,7 +115,13 @@ choose_splines_thorough <- function(d,
                                     icr_fn = stats::BIC,
                                     cost_fn = stats::AIC,
                                     verbose = TRUE) {
-  if (missing(icr_fn)) icr_fn <- stats::BIC
+  score_type <- NULL
+  if (missing(icr_fn)) {
+    icr_fn <- stats::BIC
+    score_type <- "BIC"
+  } else {
+    score_type <- deparse(substitute(icr_fn))
+  }
   if (missing(cost_fn)) cost_fn <- stats::AIC
   if (missing(max_nknots)) max_nknots <- 7
   if (missing(verbose)) verbose <- TRUE
@@ -131,7 +137,6 @@ choose_splines_thorough <- function(d,
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
-  score_type <- deparse(substitute(icr_fn))
   ret_desc <- list(
     "uniform" = "The start model was based on uniformly distanced knots",
     "distinct" = "The start model was based on one knot per distict value",
@@ -248,7 +253,7 @@ choose_splines_thorough <- function(d,
   quantile_knots_cnt <- length(quantile_knots$knots)
 
   if (verbose) {
-    R.utils::printf("The resulting model's %s score was %f, with %d knots.\n",
+    R.utils::printf("The resulting %s score was %f, with %d knots.\n",
       score_type, quantile_score, quantile_knots_cnt)
     R.utils::printf("-----------------------------------------------------\n")
   }
@@ -279,17 +284,17 @@ choose_splines_thorough <- function(d,
   return(ret)
 }
 
-# main <- function() {
-#   library(ggplot2)
-#   library("cladina")
+main <- function() {
+  library(ggplot2)
+  library("cladina")
 
-#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
-#   file_name_test <-
-#     "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
+  file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
+  file_name_test <-
+    "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
 
-#   d <- read.table(file_name, sep = ",", header = TRUE)
+  d <- read.table(file_name, sep = ",", header = TRUE)
 
-#   choose_splines_thorough(d, Dependent, Independent)
+  choose_splines_thorough(d, Dependent, Independent)
 
-#   print("ferdig")
-# }
+  print("ferdig")
+}
