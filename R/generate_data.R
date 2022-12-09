@@ -1,14 +1,6 @@
 #' Generates synthetic data
 #'
-#' The returned data frame has the following columns:
-#' ID               # IDs
-#' Independent      # The measured X values (rounded according to accuracy)
-#' Dependent        # The measured Y values (rounded according to accuracy)
-#' IndependentRaw   # The raw X values (not rounded)
-#' DependentRaw     # The raw Y values (not rounded)
-#' SignalRaw        # The raw signal part of the population mean curve for Y
-#' Noise            # The raw noise (variance) for the DependentRaw values
-#' SignalMeasured   # The signal rounded according to accuracy
+#' Se the examples section for information about the returned column names
 #'
 #' @param n The number of units in the sample
 #' @param x_accr The accuracy (number of decimals) of independent variable
@@ -21,7 +13,15 @@
 #' @return A dataframe with generated data
 #' @export
 #' @examples
-#'
+#' The returned data frame has the following columns:
+#' ID               # IDs
+#' Independent      # The measured X values (rounded according to accuracy)
+#' Dependent        # The measured Y values (rounded according to accuracy)
+#' IndependentRaw   # The raw X values (not rounded)
+#' DependentRaw     # The raw Y values (not rounded)
+#' SignalRaw        # The raw signal part of the population mean curve for Y
+#' Noise            # The raw noise (variance) for the DependentRaw values
+#' SignalMeasured   # The signal rounded according to accuracy
 generate_data <- function(n, x_accr, y_accr, f_x_dist, f_signal, f_noise) {
   ids <- 1:n 
   xs_raw <- f_x_dist(n)

@@ -25,6 +25,9 @@ population means for y, which can be heteroscedastic.}
 A dataframe with generated data
 }
 \description{
+Se the examples section for information about the returned column names
+}
+\examples{
 The returned data frame has the following columns:
 ID               # IDs
 Independent      # The measured X values (rounded according to accuracy)
