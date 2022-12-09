@@ -84,6 +84,6 @@ f_signal_linear <- function(xs) {
 #' @return The noise/randomness to add to the y values (dependent variable's
 #' population means)
 #' @export
-f_noise_norm <- function(ys) {
+f_noise_rnorm_scaled <- function(ys) {
   return(rnorm(length(ys)) * ys)
 }

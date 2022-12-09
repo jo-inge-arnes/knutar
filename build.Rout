@@ -39,10 +39,10 @@ Installed roxygen2 is older than the version used with this package
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
 Removed empty directory ‘cladina/logs’
-* building ‘cladina_0.0.0.9056.tar.gz’
+* building ‘cladina_0.0.0.9058.tar.gz’
 
 Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/RtmpkNNS2t/cladina_0.0.0.9056.tar.gz --install-tests 
+  /tmp/RtmpbSSBSL/cladina_0.0.0.9058.tar.gz --install-tests 
 * installing to library ‘/usr/local/lib/R/site-library’
 * installing *source* package ‘cladina’ ...
 ** using staged installation
@@ -58,4 +58,4 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 > 
 > proc.time()
    user  system elapsed 
-  3.319   0.190   3.877 
+  3.211   0.261   3.659 
