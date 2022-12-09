@@ -279,22 +279,24 @@ choose_splines_thorough <- function(d,
     R.utils::printf(
       "The chosen model was of type '%s' with %s = %f and %d knots.\n",
       ret$type, ret$score_name, ret$score, unique_knots_cnt)
+
+      print("Tip: Visualize with 'plot_models' and 'plot_rstandard' functions")
   }
 
   return(ret)
 }
 
-main <- function() {
-  library(ggplot2)
-  library("cladina")
+# main <- function() {
+#   library(ggplot2)
+#   library("cladina")
 
-  file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
-  file_name_test <-
-    "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
+#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
+#   file_name_test <-
+#     "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
 
-  d <- read.table(file_name, sep = ",", header = TRUE)
+#   d <- read.table(file_name, sep = ",", header = TRUE)
 
-  choose_splines_thorough(d, Dependent, Independent)
+#   choose_splines_thorough(d, Dependent, Independent)
 
-  print("ferdig")
-}
+#   print("ferdig")
+# }
