@@ -27,12 +27,6 @@ Loading required package: usethis
 ℹ Updating cladina documentation
 ℹ Loading cladina
 Warning: [generate_data.R:23] @examples requires a value
-Writing 'NAMESPACE'
-Writing 'generate_data.Rd'
-Writing 'f_x_rnorm_dist.Rd'
-Writing 'f_signal_cos.Rd'
-Writing 'f_signal_linear.Rd'
-Writing 'f_noise_norm.Rd'
 Warning message:
 Installed roxygen2 is older than the version used with this package
 ℹ You have "7.2.2" but you need "7.2.2.9000" 
@@ -48,7 +42,7 @@ Removed empty directory ‘cladina/logs’
 * building ‘cladina_0.0.0.9056.tar.gz’
 
 Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/RtmpmEV0Hh/cladina_0.0.0.9056.tar.gz --install-tests 
+  /tmp/RtmpkNNS2t/cladina_0.0.0.9056.tar.gz --install-tests 
 * installing to library ‘/usr/local/lib/R/site-library’
 * installing *source* package ‘cladina’ ...
 ** using staged installation
@@ -64,4 +58,4 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 > 
 > proc.time()
    user  system elapsed 
-  3.477   0.220   4.062 
+  3.319   0.190   3.877 
