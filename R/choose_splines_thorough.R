@@ -227,17 +227,18 @@ choose_splines_thorough <- function(d,
   # ----------------------------------------------------------------------------
   # Start with best knot count obtained for various same-sized quantiles
   # ----------------------------------------------------------------------------
-  max_nknots <- nrow(d) %/% 2
+  upper_knot_assess_limit <- nrow(d) %/% 2
   suggested_nknots_res <- suggest_knotcount(d, !!dependent, !!independents,
-    max_nknots = max_nknots, icr_fn = icr_fn)
+    max_nknots = upper_knot_assess_limit)
   suggested_knot_cnt <- suggested_nknots_res$nknots
 
   if (verbose) {
     R.utils::printf("Finding model from a start model with the best %s ",
       score_type)
-    R.utils::printf(
-      "for [0, %d] knots, which had %d knots and a score of %f.\n",
-      max_nknots, suggested_knot_cnt, suggested_nknots_res$score)
+    R.utils::printf("for [0, %d] knots for uniform quantiles. ",
+      upper_knot_assess_limit)
+    R.utils::printf("The resulting start model %d knots and a score of %f.\n",
+      suggested_knot_cnt, suggested_nknots_res$score)
   }
 
   mod <- model_by_count(d,  !!dependent, !!independents, suggested_knot_cnt)

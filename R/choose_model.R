@@ -117,60 +117,62 @@ choose_model <- function(dataset,
     R.utils::printf("%s\n%s: %f\n\n", ret_desc[["mfp"]], score_type, mfp_score)
   }
 
-  # Natural splines with knots distanced by equally sized bins (quantiles)
-  knotcnt_suggestion <-
-    suggest_knotcount(dataset, !!dependent, !!independents, max_nsknots,
-      icr_fn = icr_fn)
-  ns_mod <- model_by_count(dataset, !!dependent, !!independents,
-    knotcnt_suggestion$nknots)
-  ns_score <- icr_fn(ns_mod)
+suppressWarnings({
+    # Natural splines with knots distanced by equally sized bins (quantiles)
+    knotcnt_suggestion <-
+      suggest_knotcount(dataset, !!dependent, !!independents, max_nsknots,
+        icr_fn = icr_fn)
+    ns_mod <- model_by_count(dataset, !!dependent, !!independents,
+      knotcnt_suggestion$nknots)
+    ns_score <- icr_fn(ns_mod)
 
-  extracted_knots <- extract_knots(ns_mod)
-  ret <-
-    append(ret, list(ns =
-      list(model = ns_mod,
-        score = ns_score,
-        knot_cnt_arg = knotcnt_suggestion$nknots,
-        knot_cnt_distinct = length(extracted_knots$knots),
-        knot_placements = extracted_knots)))
+    extracted_knots <- extract_knots(ns_mod)
+    ret <-
+      append(ret, list(ns =
+        list(model = ns_mod,
+          score = ns_score,
+          knot_cnt_arg = knotcnt_suggestion$nknots,
+          knot_cnt_distinct = length(extracted_knots$knots),
+          knot_placements = extracted_knots)))
 
-  if (verbose) {
-    R.utils::printf("%s\n%s: %f\n", ret_desc[["ns"]], score_type, ns_score)
-    R.utils::printf("Suggested knot count: %d\n", knotcnt_suggestion$nknots)
-    print_knots(extract_knots(ns_mod))
-    R.utils::printf("\n")
-  }
+    if (verbose) {
+      R.utils::printf("%s\n%s: %f\n", ret_desc[["ns"]], score_type, ns_score)
+      R.utils::printf("Suggested knot count: %d\n", knotcnt_suggestion$nknots)
+      print_knots(extract_knots(ns_mod))
+      R.utils::printf("\n")
+    }
 
-  # Natural splines with freely placed knots
-  cladina_res <- choose_splines(dataset, !!dependent, !!independents,
-    max_nsknots, icr_fn = icr_fn, cost_fn = cost_fn)
+    # Natural splines with freely placed knots
+    cladina_res <- choose_splines(dataset, !!dependent, !!independents,
+      max_nsknots, icr_fn = icr_fn, cost_fn = cost_fn)
 
-  ret <-
-    append(ret, list(ns_nu =
-      list(model = cladina_res$model,
-        score = cladina_res$score,
-        knot_cnt_distinct = length(cladina_res$knots$knots),
-        knot_placements = cladina_res$knots)))
+    ret <-
+      append(ret, list(ns_nu =
+        list(model = cladina_res$model,
+          score = cladina_res$score,
+          knot_cnt_distinct = length(cladina_res$knots$knots),
+          knot_placements = cladina_res$knots)))
 
-  if (verbose) {
-    R.utils::printf("%s\n%s: %f\n",
-      ret_desc[["ns_nu"]], score_type, cladina_res$score)
-    print_knots(cladina_res$knots)
-    R.utils::printf("\n")
-  }
+    if (verbose) {
+      R.utils::printf("%s\n%s: %f\n",
+        ret_desc[["ns_nu"]], score_type, cladina_res$score)
+      print_knots(cladina_res$knots)
+      R.utils::printf("\n")
+    }
 
-  if ((mfp_score <= ns_score) && (mfp_score <= cladina_res$score)) {
-    ret <- append(ret, list(model = mfp_mod, type = "mfp", score = mfp_score))
-  } else if (ns_score <= cladina_res$score) {
-    ret <- append(ret, list(model = ns_mod, type = "ns", score = ns_score))
-  } else {
-    ret <- append(ret, list(model = cladina_res$model, type = "ns_nu",
-      score = cladina_res$score))
-  }
+    if ((mfp_score <= ns_score) && (mfp_score <= cladina_res$score)) {
+      ret <- append(ret, list(model = mfp_mod, type = "mfp", score = mfp_score))
+    } else if (ns_score <= cladina_res$score) {
+      ret <- append(ret, list(model = ns_mod, type = "ns", score = ns_score))
+    } else {
+      ret <- append(ret, list(model = cladina_res$model, type = "ns_nu",
+        score = cladina_res$score))
+    }
 
-  if (verbose) {
-    R.utils::printf("Chosen model type:\n%s\n", ret_desc[[ret$type]])
-  }
+    if (verbose) {
+      R.utils::printf("Chosen model type:\n%s\n", ret_desc[[ret$type]])
+    }
+  })
 
   return(ret)
 }

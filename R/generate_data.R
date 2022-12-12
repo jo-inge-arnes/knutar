@@ -53,6 +53,15 @@ f_x_rnorm_dist <- function(n) {
   return(rnorm(n))
 }
 
+#' A function that can be passed to 'generate_data' as the 'f_x_dist' parameter.
+#' Lognormal distribution with mean = 0 and standard deviation = 1
+#' @param n The number of units in the sample
+#' @return The raw values for x
+#' @export
+f_x_lognorm_dist <- function(n) {
+  return(rlnorm(n))
+}
+
 #' Function for the relationship between independent and dependent variable,
 #' which can be passed to 'generate_data' as the 'f_signal' parameter.
 #'
@@ -73,6 +82,20 @@ f_signal_cos <- function(xs) {
 #' @export
 f_signal_linear <- function(xs) {
   return(xs * 1.5)
+}
+
+#' Function for the relationship between independent and dependent variable,
+#' which can be passed to 'generate_data' as the 'f_signal' parameter.
+#'
+#' This signal is based on the Michaelis-Menten equation with 
+#' K_m = 2.0 mL, V_max = 0.5 mM/min.
+#' @param xs The x values
+#' @return The raw signal part of the y values
+#' @export
+f_signal_michaelis_menten <- function(xs) {
+  v_max <- 0.5
+  k_m <- 2.0
+  return ((xs * v_max) / (xs + k_m))
 }
 
 #' Function for the noise (variance) to add to the signal that can be passed to
