@@ -237,7 +237,7 @@ choose_splines_thorough <- function(d,
       score_type)
     R.utils::printf("for [0, %d] knots for uniform quantiles. ",
       upper_knot_assess_limit)
-    R.utils::printf("The resulting start model %d knots and a score of %f.\n",
+    R.utils::printf("The start model had %d knots and a score of %f.\n",
       suggested_knot_cnt, suggested_nknots_res$score)
   }
 
@@ -254,7 +254,7 @@ choose_splines_thorough <- function(d,
   quantile_knots_cnt <- length(quantile_knots$knots)
 
   if (verbose) {
-    R.utils::printf("The resulting %s score was %f, with %d knots.\n",
+    R.utils::printf("The resulting model's %s score was %f, with %d knots.\n",
       score_type, quantile_score, quantile_knots_cnt)
     R.utils::printf("-----------------------------------------------------\n")
   }
