@@ -31,12 +31,12 @@ generate_data <- function(n, x_accr, y_accr, f_x_dist,
   ys_raw <- ys_signal + ys_noise
 
   xs_measured <- xs_raw
-  if ((missing(x_accr) == FALSE) && (x_accr != NULL)) {
+  if (!missing(x_accr) && !is.null(x_accr) && x_accr > -1) {
     xs_measured <- round(xs_raw, x_accr)
   }
 
   ys_measured <- ys_raw
-  if ((missing(y_accr) == FALSE) && (y_accr != NULL)) {
+  if (!missing(y_accr) && !is.null(y_accr) && y_accr > -1) {
     ys_measured <- round(ys_raw, y_accr)
   }
 
