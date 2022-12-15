@@ -6,7 +6,7 @@
 #' @examples
 #' plot_rstandard(d, my_mod)
 plot_rstandard <- function(dataset, model) {
-    ggplot2::ggplot(dataset, aes(x = stats::predict(model, dataset),
+    ggplot2::ggplot(dataset, ggplot2::aes(x = stats::predict(model, dataset),
       y = stats::rstandard(model))) +
   ggplot2::geom_point() +
   ggplot2::geom_smooth(method = "loess", formula = y ~ x)
