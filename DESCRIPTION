@@ -1,6 +1,6 @@
 Package: cladina
 Title: Suggest Knot Placements for Natural Splines
-Version: 0.0.0.9063
+Version: 0.0.0.9064
 Authors@R:
     person("Jo Inge", "Arnes", , "jo.i.arnes@uit.no", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8053-2741"))

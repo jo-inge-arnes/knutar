@@ -22,14 +22,24 @@
 #' SignalRaw        # The raw signal part of the population mean curve for Y
 #' Noise            # The raw noise (variance) for the DependentRaw values
 #' SignalMeasured   # The signal rounded according to accuracy
-generate_data <- function(n, x_accr, y_accr, f_x_dist, f_signal, f_noise) {
-  ids <- 1:n 
+generate_data <- function(n, x_accr, y_accr, f_x_dist,
+                          f_signal, f_noise) {
+  ids <- 1:n
   xs_raw <- f_x_dist(n)
-  ys_signal <- f_signal(xs_raw) 
+  ys_signal <- f_signal(xs_raw)
   ys_noise <- f_noise(ys_signal)
   ys_raw <- ys_signal + ys_noise
-  xs_measured <- round(xs_raw, x_accr)
-  ys_measured <- round(ys_raw, y_accr)
+
+  xs_measured <- xs_raw
+  if (!missing(xs_raw) && xs_raw != NULL) {
+    xs_measured <- round(xs_raw, x_accr)
+  }
+
+  ys_measured <- ys_raw
+  if (!missing(ys_raw) && ys_raw != NULL) {
+    ys_measured <- round(ys_raw, y_accr)
+  }
+
   xs_measured_signal <- f_signal(xs_measured)
 
   return(data.frame(
@@ -87,7 +97,7 @@ f_signal_linear <- function(xs) {
 #' Function for the relationship between independent and dependent variable,
 #' which can be passed to 'generate_data' as the 'f_signal' parameter.
 #'
-#' This signal is based on the Michaelis-Menten equation with 
+#' This signal is based on the Michaelis-Menten equation with
 #' K_m = 2.0 mL, V_max = 0.5 mM/min.
 #' @param xs The x values
 #' @return The raw signal part of the y values
