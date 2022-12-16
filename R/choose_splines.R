@@ -16,7 +16,7 @@
 #' model be deemed a better model than an alternative lower knot model?
 #' @param all_models If TRUE, the function will include all intermediate models
 #' in the results as 'all_models'. Default is FALSE.
-#' @return The chosen 'model', 'score', 'nknots', and 'all_models'
+#' @return The chosen 'model', 'score', 'knots', and 'all_models'
 #' @export
 #' @examples
 #' my_model <- choose_splines(d, y, x, 7)

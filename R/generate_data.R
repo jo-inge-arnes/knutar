@@ -80,7 +80,7 @@ f_x_lognorm_dist <- function(n) {
 #' @return The raw signal part of the y values
 #' @export
 f_signal_cos <- function(xs) {
-  return(cos(1.5 * pi * xs))
+  return(cos(pi * xs))
 }
 
 #' Function for the relationship between independent and dependent variable,
@@ -92,6 +92,17 @@ f_signal_cos <- function(xs) {
 #' @export
 f_signal_linear <- function(xs) {
   return(xs * 1.5)
+}
+
+#' Function for the relationship between independent and dependent variable,
+#' which can be passed to 'generate_data' as the 'f_signal' parameter.
+#'
+#' This signal is based on the formula f(x) = x / (0.5 + x)
+#' @param xs The x values
+#' @return The raw signal part of the y values
+#' @export
+f_signal_x_div_half_plus_x <- function(xs) {
+  return(xs / (0.5 + xs))
 }
 
 #' Function for the relationship between independent and dependent variable,
@@ -118,5 +129,17 @@ f_signal_michaelis_menten <- function(xs) {
 #' population means)
 #' @export
 f_noise_rnorm_scaled <- function(ys) {
-  return(rnorm(length(ys)) * ys)
+  return(rnorm(length(ys)) * (0.25 * ys))
+}
+
+#' Function for the noise (variance) to add to the signal that can be passed to
+#' 'generate_data' as the 'f_noise' parameter.
+#'
+#' This function is based on drawing a values from a normal distribution.
+#' @param ys The y (dependent) values for which to generate noise/randomness
+#' @return The noise/randomness to add to the y values (dependent variable's
+#' population means)
+#' @export
+f_noise_rnorm <- function(ys) {
+  return(rnorm(length(ys)) / 5)
 }

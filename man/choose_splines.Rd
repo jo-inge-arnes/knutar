@@ -42,7 +42,7 @@ model be deemed a better model than an alternative lower knot model?}
 in the results as 'all_models'. Default is FALSE.}
 }
 \value{
-The chosen 'model', 'score', 'nknots', and 'all_models'
+The chosen 'model', 'score', 'knots', and 'all_models'
 }
 \description{
 The maximum number of knots is given as an input argument.
