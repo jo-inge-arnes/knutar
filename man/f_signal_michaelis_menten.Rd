@@ -15,5 +15,5 @@ The raw signal part of the y values
 }
 \description{
 This signal is based on the Michaelis-Menten equation with
-K_m = 2.0 mL, V_max = 0.5 mM/min.
+K_m = 2.0 μM, V_max = 10.0 μmol/sec.
 }

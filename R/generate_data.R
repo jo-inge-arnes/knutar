@@ -109,12 +109,12 @@ f_signal_x_div_half_plus_x <- function(xs) {
 #' which can be passed to 'generate_data' as the 'f_signal' parameter.
 #'
 #' This signal is based on the Michaelis-Menten equation with
-#' K_m = 2.0 mL, V_max = 0.5 mM/min.
+#' K_m = 2.0 μM, V_max = 10.0 μmol/sec.
 #' @param xs The x values
 #' @return The raw signal part of the y values
 #' @export
 f_signal_michaelis_menten <- function(xs) {
-  v_max <- 0.5
+  v_max <- 10.0
   k_m <- 2.0
   return ((xs * v_max) / (xs + k_m))
 }
