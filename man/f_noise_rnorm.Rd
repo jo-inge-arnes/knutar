@@ -5,10 +5,10 @@
 \title{Function for the noise (variance) to add to the signal that can be passed to
 'generate_data' as the 'f_noise' parameter.}
 \usage{
-f_noise_rnorm(ys)
+f_noise_rnorm(xs)
 }
 \arguments{
-\item{ys}{The y (dependent) values for which to generate noise/randomness}
+\item{xs}{The x (independent) values for which to generate noise/randomness}
 }
 \value{
 The noise/randomness to add to the y values (dependent variable's

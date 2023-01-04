@@ -5,16 +5,16 @@
 \title{Function for the noise (variance) to add to the signal that can be passed to
 'generate_data' as the 'f_noise' parameter.}
 \usage{
-f_noise_rnorm_scaled(ys)
+f_noise_rnorm_scaled(xs)
 }
 \arguments{
-\item{ys}{The y (dependent) values for which to generate noise/randomness}
+\item{xs}{The x (independent) values for which to generate noise/randomness}
 }
 \value{
 The noise/randomness to add to the y values (dependent variable's
 population means)
 }
 \description{
-This function is based on drawing a values from a normal distribution and
-multiplying by the y values, giving a variance that scales with y.
+This function is based on drawing values from a normal distribution and
+multiplying by a factor of the x values, so the variance for y scales with x.
 }

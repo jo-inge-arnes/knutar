@@ -27,7 +27,7 @@ generate_data <- function(n, x_accr, y_accr, f_x_dist,
   ids <- 1:n
   xs_raw <- f_x_dist(n)
   ys_signal <- f_signal(xs_raw)
-  ys_noise <- f_noise(ys_signal)
+  ys_noise <- f_noise(xs_raw)
   ys_raw <- ys_signal + ys_noise
 
   xs_measured <- xs_raw
@@ -122,24 +122,24 @@ f_signal_michaelis_menten <- function(xs) {
 #' Function for the noise (variance) to add to the signal that can be passed to
 #' 'generate_data' as the 'f_noise' parameter.
 #'
-#' This function is based on drawing a values from a normal distribution and
-#' multiplying by the y values, giving a variance that scales with y.
-#' @param ys The y (dependent) values for which to generate noise/randomness
+#' This function is based on drawing values from a normal distribution and
+#' multiplying by a factor of the x values, so the variance for y scales with x.
+#' @param xs The x (independent) values for which to generate noise/randomness
 #' @return The noise/randomness to add to the y values (dependent variable's
 #' population means)
 #' @export
-f_noise_rnorm_scaled <- function(ys) {
-  return(rnorm(length(ys)) * (0.25 * ys))
+f_noise_rnorm_scaled <- function(xs) {
+  return(rnorm(length(xs)) * (0.25 * xs))
 }
 
 #' Function for the noise (variance) to add to the signal that can be passed to
 #' 'generate_data' as the 'f_noise' parameter.
 #'
 #' This function is based on drawing a values from a normal distribution.
-#' @param ys The y (dependent) values for which to generate noise/randomness
+#' @param xs The x (independent) values for which to generate noise/randomness
 #' @return The noise/randomness to add to the y values (dependent variable's
 #' population means)
 #' @export
-f_noise_rnorm <- function(ys) {
-  return(rnorm(length(ys)) / 5)
+f_noise_rnorm <- function(xs) {
+  return(rnorm(length(xs)) / 5)
 }
