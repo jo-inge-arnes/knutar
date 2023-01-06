@@ -41,7 +41,7 @@ Removed empty directory ‘cladina/logs’
 * building ‘cladina_0.0.0.9070.tar.gz’
 
 Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/RtmpREyBM3/cladina_0.0.0.9070.tar.gz --install-tests 
+  /tmp/RtmpEGSCyt/cladina_0.0.0.9070.tar.gz --install-tests 
 * installing to library ‘/usr/local/lib/R/site-library’
 * installing *source* package ‘cladina’ ...
 ** using staged installation
@@ -57,4 +57,4 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 > 
 > proc.time()
    user  system elapsed 
-  3.337   0.169   3.643 
+  3.215   0.182   3.594 
