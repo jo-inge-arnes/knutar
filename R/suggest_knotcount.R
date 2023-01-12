@@ -54,7 +54,7 @@ suggest_knotcount <- function(dataset,
       consecutive_non_convergance <- consecutive_non_convergance + 1
 
       if (consecutive_non_convergance >= 2) {
-        warning(parse("Models failed to converge two consecutive times,",
+        warning(paste("Models failed to converge two consecutive times,",
           "will not assess any higher knot counts."))
         break
       }
