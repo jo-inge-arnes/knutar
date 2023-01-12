@@ -33,7 +33,9 @@ suggest_knotcount <- function(dataset,
   n_knots <- list()
   scores <- list()
 
-independents_str <- sub("~", "", deparse(independents))
+  independents_str <- sub("~", "", deparse(independents))
+
+  consecutive_non_convergance <- 0
 
   for (i in 1:(max_nknots + 1)) {
     model_formula <- stats::formula(paste0(
@@ -45,6 +47,20 @@ independents_str <- sub("~", "", deparse(independents))
         ")"))
 
     mod_spline <- stats::glm(model_formula, data = dataset)
+
+    if (mod_spline$converged) {
+      consecutive_non_convergance <- 0
+    } else {
+      consecutive_non_convergance <- consecutive_non_convergance + 1
+
+      if (consecutive_non_convergance >= 2) {
+        warning(parse("Models failed to converge two consecutive times,",
+          "will not assess any higher knot counts."))
+        break
+      }
+
+      next
+    }
 
     icr_score <- icr_fn(mod_spline)
 
