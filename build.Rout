@@ -33,10 +33,10 @@ Loading required package: usethis
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
-* building ‘cladina_0.0.0.9073.tar.gz’
+* building ‘cladina_0.0.0.9075.tar.gz’
 
 Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/Rtmp2aN8wj/cladina_0.0.0.9073.tar.gz --install-tests 
+  /tmp/Rtmpcz7hoN/cladina_0.0.0.9075.tar.gz --install-tests 
 * installing to library ‘/home/jo/R/x86_64-pc-linux-gnu-library/4.1’
 * installing *source* package ‘cladina’ ...
 ** using staged installation
@@ -52,4 +52,4 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 > 
 > proc.time()
    user  system elapsed 
-  5.727   3.494  19.612 
+  5.546   3.288  19.447 

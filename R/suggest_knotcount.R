@@ -9,6 +9,7 @@
 #' @param all_scores If TRUE, all scores are returned in a list 'all_scores'
 #' @return A list with named elements 'nknots', 'score', and 'all_scores'
 #' @importFrom splines ns
+#' @importFrom tryCatchLog tryLog tryCatchLog
 #' @export
 #' @examples
 #' suggest_knotcount(d, nwsize, age_dec)
@@ -47,9 +48,11 @@ suggest_knotcount <- function(dataset,
         i,
         ")"))
 
-    mod_spline <- stats::glm(model_formula, data = dataset)
+    mod_spline <- NULL
+    tryCatchLog::tryLog(
+      mod_spline <- stats::glm(model_formula, data = dataset))
 
-    if (mod_spline$converged) {
+    if (!is.null(mod_spline) && mod_spline$converged) {
       consecutive_non_convergance <- 0
     } else {
       consecutive_non_convergance <- consecutive_non_convergance + 1
