@@ -24,6 +24,7 @@ suggest_knotcount <- function(dataset,
   if (missing(max_nknots) || max_nknots == -1) {
     max_nknots <- nrow(dataset) %/% 2
   }
+
   if (missing(icr_fn)) icr_fn <- stats::AIC
   if (missing(all_scores)) all_scores <- FALSE
 
@@ -52,26 +53,24 @@ suggest_knotcount <- function(dataset,
       consecutive_non_convergance <- 0
     } else {
       consecutive_non_convergance <- consecutive_non_convergance + 1
+    }
 
-      if (consecutive_non_convergance >= 2) {
-        warning(paste("Models failed to converge two consecutive times,",
-          "will not assess any higher knot counts."))
-        break
+    if (consecutive_non_convergance == 0) {
+      icr_score <- icr_fn(mod_spline)
+
+      if (all_scores) {
+        scores <- append(scores, icr_score)
+        n_knots <- append(n_knots, i - 1)
       }
 
-      next
-    }
-
-    icr_score <- icr_fn(mod_spline)
-
-    if (all_scores) {
-      scores <- append(scores, icr_score)
-      n_knots <- append(n_knots, i - 1)
-    }
-
-    if (icr_score < min_icr) {
-      min_icr <- icr_score
-      min_ndf <- i
+      if (icr_score < min_icr) {
+        min_icr <- icr_score
+        min_ndf <- i
+      }
+    } else if (consecutive_non_convergance >= 3) {
+      warning(paste("Models failed to converge three consecutive times,",
+        "will not assess any higher knot counts."))
+      break
     }
   }
 
