@@ -22,8 +22,8 @@
 #' 'Boundary.knots' is returned.
 #' @export
 #' @examples
-#' my_model <- suggest_splines(d, y, x, 7)
-#' my_model <- suggest_splines(d, y, x, 7, 300, BIC)
+#' my_model <- suggest_splines(d, y, x, 4)
+#' my_model <- suggest_splines(d, y, x, 4, 100, BIC)
 suggest_splines <- function(dataset,
                           dependent,
                           independents,

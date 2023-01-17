@@ -1,4 +1,4 @@
-#' Utility function for natural splines that wraps the 'lm' and 'ns' functions
+#' Utility function for natural splines that wraps the 'glm' and 'ns' functions
 #'
 #' Creates a natural splines regression model given the wanted number of knots
 #' @param dataset The data frame
@@ -25,7 +25,7 @@ model_by_count <- function(dataset, dependent, independents, nknots) {
   return(ns_model)
 }
 
-#' Utility function for natural splines that wraps the 'lm' and 'ns' functions
+#' Utility function for natural splines that wraps the 'glm' and 'ns' functions
 #'
 #' Creates a natural splines regression model from the given placements of
 #' the knots and boundary knots
