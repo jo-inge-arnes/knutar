@@ -10,7 +10,7 @@ choose_removal(
   independents,
   knots,
   boundary_knots,
-  cost_fn = stats::AIC
+  cost_fn = stats::BIC
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ choose_removal(
 
 \item{boundary_knots}{The boundary knot placements}
 
-\item{cost_fn}{The function for the selection criterion score (AIC default)}
+\item{cost_fn}{The function for the selection criterion score (BIC default)}
 }
 \value{
 A named list with 'index' of the chosen knot, 'model', and 'score'

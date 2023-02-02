@@ -2,7 +2,7 @@
 % Please edit documentation in R/natural_splines.R
 \name{model_by_knots}
 \alias{model_by_knots}
-\title{Utility function for natural splines that wraps the 'lm' and 'ns' functions}
+\title{Utility function for natural splines that wraps the 'glm' and 'ns' functions}
 \usage{
 model_by_knots(dataset, dependent, independents, knots, boundary_knots)
 }

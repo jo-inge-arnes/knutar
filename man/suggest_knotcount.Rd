@@ -10,7 +10,7 @@ suggest_knotcount(
   dependent,
   independents,
   max_nknots = -1,
-  icr_fn = stats::AIC,
+  icr_fn = stats::BIC,
   all_scores = FALSE
 )
 }
@@ -21,11 +21,11 @@ suggest_knotcount(
 
 \item{independents}{The independent variable(s) in the formula}
 
-\item{icr_fn}{The information criterion function. Defaults to AIC}
+\item{icr_fn}{The information criterion function. Defaults to BIC}
 
 \item{all_scores}{If TRUE, all scores are returned in a list 'all_scores'}
 
-\item{maximum_knots}{The highest knot count to assess. Defaults to n / 2}
+\item{maximum_knots}{The highest knot count to assess. Defaults to n / 3}
 }
 \value{
 A list with named elements 'nknots', 'score', and 'all_scores'

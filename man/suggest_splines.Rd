@@ -47,6 +47,6 @@ as an argument as well, but  defaults to the suggested number of knots
 obtained from the function 'suggest_knotcount'.
 }
 \examples{
-my_model <- suggest_splines(d, y, x, 7)
-my_model <- suggest_splines(d, y, x, 7, 300, BIC)
+my_model <- suggest_splines(d, y, x, 4)
+my_model <- suggest_splines(d, y, x, 4, 100, BIC)
 }
