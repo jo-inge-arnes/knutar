@@ -9,7 +9,7 @@
 #' @param independents The independent variables in the formula
 #' @param knots The knot placements
 #' @param boundary_knots The boundary knot placements
-#' @param cost_fn The function for the selection criterion score (AIC default)
+#' @param cost_fn The function for the selection criterion score (BIC default)
 #' @return A named list with 'index' of the chosen knot, 'model', and 'score'
 #' @export
 #' @examples
@@ -21,7 +21,7 @@ choose_removal <- function(dataset,
                                 independents,
                                 knots,
                                 boundary_knots,
-                                cost_fn = stats::AIC) {
+                                cost_fn = stats::BIC) {
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
 
