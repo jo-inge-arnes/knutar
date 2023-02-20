@@ -4,7 +4,8 @@
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variable(s) in the formula
-#' @param maximum_knots The highest knot count to assess. Defaults to n / 3
+#' @param maximum_knots The highest knot count to assess. Defaults the lower of
+#' 40 and n / 3
 #' @param icr_fn The information criterion function. Defaults to BIC
 #' @param all_scores If TRUE, all scores are returned in a list 'all_scores'
 #' @return A list with named elements 'nknots', 'score', and 'all_scores'
@@ -22,7 +23,7 @@ suggest_knotcount <- function(dataset,
   independents <- rlang::enquo(independents)
 
   if (missing(max_nknots) || max_nknots == -1) {
-    max_nknots <- nrow(dataset) %/% 3
+    max_nknots <- min(40, nrow(dataset) %/% 3)
   }
 
   if (missing(icr_fn)) icr_fn <- stats::BIC

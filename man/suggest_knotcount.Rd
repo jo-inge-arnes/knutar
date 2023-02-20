@@ -25,7 +25,8 @@ suggest_knotcount(
 
 \item{all_scores}{If TRUE, all scores are returned in a list 'all_scores'}
 
-\item{maximum_knots}{The highest knot count to assess. Defaults to n / 3}
+\item{maximum_knots}{The highest knot count to assess. Defaults the lower of
+40 and n / 3}
 }
 \value{
 A list with named elements 'nknots', 'score', and 'all_scores'
