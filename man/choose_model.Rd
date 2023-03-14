@@ -9,8 +9,9 @@ choose_model(
   dataset,
   dependent,
   independents,
+  ...,
   icr_fn = stats::BIC,
-  cost_fn = stats::AIC,
+  cost_fn = stats::BIC,
   fp_alpha = NA,
   max_nsknots = 7,
   max_fp_df = 4,
@@ -29,7 +30,7 @@ choose_model(
 models with different degress for freedom or knots (default BIC)}
 
 \item{cost_fn}{The criterion used to choose which knots to remove, passed to
-the function choose_removal. Defaults to AIC.}
+the function choose_removal. Defaults to BIC.}
 
 \item{fp_alpha}{The relax factor for multivariate fractional polynomials}
 
@@ -54,7 +55,7 @@ giving the best results according to an information criterion
 }
 \examples{
 my_model <- choose_model(d, y, x)$model
-result <- choose_model(d, y, x, icr_fn = AIC, verbose = FALSE)
+result <- choose_model(d, y, x, icr_fn = BIC, verbose = FALSE)
 
 ret <- choose_model(d, y, x)
 

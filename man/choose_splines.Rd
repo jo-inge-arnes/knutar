@@ -10,8 +10,9 @@ choose_splines(
   dependent,
   independents,
   max_nknots = 10,
+  ...,
   icr_fn = stats::BIC,
-  cost_fn = stats::AIC,
+  cost_fn = stats::BIC,
   initial_nknots = -1,
   diff_better = 0,
   all_models = FALSE,
@@ -31,7 +32,7 @@ choose_splines(
 different knot counts (BIC default)}
 
 \item{cost_fn}{The criterion used to choose which knot to remove, used by
-the function 'choose_removal'. Default is AIC.}
+the function 'choose_removal'. Default is BIC.}
 
 \item{initial_nknots}{The initial high number of knots for the algorithm
 (default is the value from the 'suggest_knotcount'-function)}

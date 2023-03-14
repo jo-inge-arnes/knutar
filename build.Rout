@@ -36,10 +36,10 @@ Writing NAMESPACE
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
-* building ‘cladina_0.0.0.9086.tar.gz’
+* building ‘cladina_0.0.0.9090.tar.gz’
 
 Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/Rtmp7jdo3h/cladina_0.0.0.9086.tar.gz --install-tests 
+  /tmp/RtmpIEmsG1/cladina_0.0.0.9090.tar.gz --install-tests 
 * installing to library ‘/home/jo/R/x86_64-pc-linux-gnu-library/4.2’
 * installing *source* package ‘cladina’ ...
 ** using staged installation
@@ -55,4 +55,4 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 > 
 > proc.time()
    user  system elapsed 
-  8.189   7.524  31.422 
+  8.254   8.000  30.960 

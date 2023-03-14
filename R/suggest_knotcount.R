@@ -18,6 +18,7 @@ suggest_knotcount <- function(dataset,
                 dependent,
                 independents,
                 max_nknots = -1,
+                ...,
                 icr_fn = stats::BIC,
                 all_scores = FALSE,
                 boundary_knots = NA) {

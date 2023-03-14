@@ -7,7 +7,7 @@
 #' @param icr_fn The information criterion function for comparing different
 #' models with different degress for freedom or knots (default BIC)
 #' @param cost_fn The criterion used to choose which knots to remove, passed to
-#' the function choose_removal. Defaults to AIC.
+#' the function choose_removal. Defaults to BIC.
 #' @param fp_alpha The relax factor for multivariate fractional polynomials
 #' @param max_nsknots The max number of knots for natural splines (default 7)
 #' @param max_fp_df The max degrees of freedom for fractional polynomials
@@ -23,7 +23,7 @@
 #' @export
 #' @examples
 #' my_model <- choose_model(d, y, x)$model
-#' result <- choose_model(d, y, x, icr_fn = AIC, verbose = FALSE)
+#' result <- choose_model(d, y, x, icr_fn = BIC, verbose = FALSE)
 #'
 #' ret <- choose_model(d, y, x)
 #'
@@ -61,8 +61,9 @@
 choose_model <- function(dataset,
                         dependent,
                         independents,
+                        ...,
                         icr_fn = stats::BIC,
-                        cost_fn = stats::AIC,
+                        cost_fn = stats::BIC,
                         fp_alpha = NA,
                         max_nsknots = 7,
                         max_fp_df = 4,
@@ -78,7 +79,7 @@ choose_model <- function(dataset,
   } else {
     score_type <- deparse(substitute(icr_fn))
   }
-  if (missing(cost_fn)) cost_fn <- stats::AIC
+  if (missing(cost_fn)) cost_fn <- stats::BIC
   if (missing(fp_alpha)) fp_alpha <- NA
   if (missing(max_nsknots)) max_nsknots <- 7
   if (missing(max_fp_df)) max_fp_df <- 4
@@ -221,7 +222,7 @@ suppressWarnings({
 #   d <- read.table(file_name, sep = ",", header = TRUE)
 #   d_test <- read.table(file_name_test, sep = ",", header = TRUE)
 
-#   ret <- choose_model(d, Dependent, Independent, AIC, verbose = FALSE)
+#   ret <- choose_model(d, Dependent, Independent, BIC, verbose = FALSE)
 
 # #  print(ret$mfp)        # Multivariate fractional polynomial
 #   print(ret$mfp$model)  # The model

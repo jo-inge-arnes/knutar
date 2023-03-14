@@ -25,7 +25,7 @@ choose_removal <- function(dataset,
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
 
-  if (missing(cost_fn)) cost_fn <- stats::AIC
+  if (missing(cost_fn)) cost_fn <- stats::BIC
 
   model_scores <- lapply(seq_along(knots), function(i) {
     mod <- model_by_knots(dataset, !!dependent, !!independents,

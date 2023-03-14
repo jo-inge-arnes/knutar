@@ -9,7 +9,7 @@
 #' @param icr_fn The information criterion function comparing models with
 #' different knot counts (BIC default)
 #' @param cost_fn The criterion used to choose which knot to remove, used by
-#' the function 'choose_removal'. Default is AIC.
+#' the function 'choose_removal'. Default is BIC.
 #' @param initial_nknots The initial high number of knots for the algorithm
 #' (default is the value from the 'suggest_knotcount'-function)
 #' @param diff_better How much lower must the score be to make a higher knot
@@ -26,8 +26,9 @@ choose_splines <- function(dataset,
                         dependent,
                         independents,
                         max_nknots = 10,
+                        ...,
                         icr_fn = stats::BIC,
-                        cost_fn = stats::AIC,
+                        cost_fn = stats::BIC,
                         initial_nknots = -1,
                         diff_better = 0,
                         all_models = FALSE,
@@ -38,7 +39,7 @@ choose_splines <- function(dataset,
 
   if (missing(max_nknots)) max_nknots <- 10
   if (missing(icr_fn)) icr_fn <- stats::BIC
-  if (missing(cost_fn)) cost_fn <- stats::AIC
+  if (missing(cost_fn)) cost_fn <- stats::BIC
   if (missing(initial_nknots)) initial_nknots <- -1
   if (missing(diff_better)) diff_better <- 0
   if (missing(all_models)) all_models <- FALSE
@@ -47,11 +48,14 @@ choose_splines <- function(dataset,
   if (initial_nknots == -1) {
     initial_nknots <-
       suggest_knotcount(dataset, !!dependent, !!independents,
-        boundary_knots)$nknots
+        boundary_knots = boundary_knots)$nknots
   }
 
   upper_model <- suggest_splines(dataset, !!dependent, !!independents,
-    max_nknots, initial_nknots, cost_fn, boundary_knots)
+    max_nknots,
+    initial_knots = initial_nknots,
+    cost_fn = cost_fn,
+    boundary_knots = boundary_knots)
 
   cur_model <- upper_model
   best_model <- cur_model

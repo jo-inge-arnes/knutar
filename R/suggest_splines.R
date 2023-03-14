@@ -13,7 +13,7 @@
 #' @param target_nknots The target and maximum number of knots for the model
 #' @param initial_nknots The number of knots initially, defaults to the
 #' result from the function 'suggest_knotcount'
-#' @param cost_fn The function for the selection criterion score (AIC default)
+#' @param cost_fn The function for the selection criterion score (BIC default)
 #' used to compare which knot should be removed, passed to choose_removal
 #' @param all_knots If TRUE, then knots for all intermediate models will be
 #' included in return value. Default is FALSE.
@@ -24,13 +24,14 @@
 #' @export
 #' @examples
 #' my_model <- suggest_splines(d, y, x, 4)
-#' my_model <- suggest_splines(d, y, x, 4, 100, BIC)
+#' my_model <- suggest_splines(d, y, x, 4, initial_nknots = 100, cost_fn = BIC)
 suggest_splines <- function(dataset,
                           dependent,
                           independents,
                           target_nknots,
+                          ...,
                           initial_nknots = -1,
-                          cost_fn = stats::AIC,
+                          cost_fn = stats::BIC,
                           all_knots = FALSE,
                           boundary_knots = NA) {
   independents <- rlang::enquo(independents)
@@ -40,10 +41,10 @@ suggest_splines <- function(dataset,
   if (initial_nknots == -1) {
     initial_nknots <-
       suggest_knotcount(dataset, !!dependent, !!independents,
-        boundary_knots)$nknots
+        boundary_knots = boundary_knots)$nknots
   }
 
-  if (missing(cost_fn)) cost_fn <- stats::AIC
+  if (missing(cost_fn)) cost_fn <- stats::BIC
   if (missing(all_knots)) all_knots <- FALSE
 
   # Find the initial model with a high number of knots, and get the distinct
