@@ -40,7 +40,7 @@ suggest_knotcount <- function(dataset,
 
   independents_str <- sub("~", "", deparse(independents))
 
-  if (is.na(boundary_knots)) {
+  if (length(boundary_knots) != 2) {
     boundary_knots_str <- ""
   } else {
     boundary_knots_str <- paste0(

@@ -20,7 +20,7 @@ model_by_count <- function(dataset, dependent, independents, nknots,
 
   if (missing(boundary_knots)) boundary_knots <- NA
 
-  if (is.na(boundary_knots)) {
+  if (length(boundary_knots) != 2) {
     model_formula <- stats::as.formula(
       paste0(rlang::as_name(dependent), " ~ ns(", independents_str,
       ", df = ", nknots + 1, ")"))
