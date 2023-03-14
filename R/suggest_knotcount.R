@@ -5,9 +5,10 @@
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variable(s) in the formula
 #' @param maximum_knots The highest knot count to assess. Defaults the lower of
-#' 40 and n / 2
+#' 50 and n / 2
 #' @param icr_fn The information criterion function. Defaults to BIC
 #' @param all_scores If TRUE, all scores are returned in a list 'all_scores'
+#' @param boundary_knots The boundary knot placements
 #' @return A list with named elements 'nknots', 'score', and 'all_scores'
 #' @importFrom splines ns
 #' @export
@@ -18,16 +19,18 @@ suggest_knotcount <- function(dataset,
                 independents,
                 max_nknots = -1,
                 icr_fn = stats::BIC,
-                all_scores = FALSE) {
+                all_scores = FALSE,
+                boundary_knots = NA) {
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
   if (missing(max_nknots) || max_nknots == -1) {
-    max_nknots <- min(40, nrow(dataset) %/% 2)
+    max_nknots <- min(50, nrow(dataset) %/% 2)
   }
 
   if (missing(icr_fn)) icr_fn <- stats::BIC
   if (missing(all_scores)) all_scores <- FALSE
+  if (missing(boundary_knots)) boundary_knots <- NA
 
   min_icr <- Inf
   min_ndf <- Inf
@@ -37,16 +40,24 @@ suggest_knotcount <- function(dataset,
 
   independents_str <- sub("~", "", deparse(independents))
 
+  if (is.na(boundary_knots)) {
+    boundary_knots_str <- ""
+  } else {
+    boundary_knots_str <- paste0(
+      ", Boundary.knots = c(", paste0(boundary_knots, collapse = ", "), ")")
+  }
+
   consecutive_non_convergance <- 0
 
   for (i in 1:(max_nknots + 1)) {
     model_formula <- stats::formula(paste0(
-        rlang::as_name(dependent),
-        " ~ ns(",
-        independents_str,
-        ", df = ",
-        i,
-        ")"))
+      rlang::as_name(dependent),
+      " ~ ns(",
+      independents_str,
+      ", df = ",
+      i,
+      boundary_knots_str,
+      ")"))
 
     mod_spline <- NULL
 

@@ -14,7 +14,8 @@ choose_splines(
   cost_fn = stats::AIC,
   initial_nknots = -1,
   diff_better = 0,
-  all_models = FALSE
+  all_models = FALSE,
+  boundary_knots = NA
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ model be deemed a better model than an alternative lower knot model?}
 
 \item{all_models}{If TRUE, the function will include all intermediate models
 in the results as 'all_models'. Default is FALSE.}
+
+\item{boundary_knots}{The boundary knot placements or NA if not specified}
 }
 \value{
 The chosen 'model', 'score', 'knots', and 'all_models'

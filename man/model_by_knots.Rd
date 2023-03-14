@@ -13,7 +13,9 @@ model_by_knots(dataset, dependent, independents, knots, boundary_knots)
 
 \item{independents}{The independent variables in the formula}
 
-\item{knots}{The boundary knot placements}
+\item{knots}{The knot placements}
+
+\item{boundary_knots}{The boundary knot placements}
 }
 \value{
 The regression model

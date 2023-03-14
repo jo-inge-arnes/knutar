@@ -13,6 +13,8 @@
 #' @param max_fp_df The max degrees of freedom for fractional polynomials
 #' (default 7)
 #' @param verbose Verbose output, default TRUE
+#' @param boundary_knots The boundary knot placements for natural cubic splines
+#' or NA if not specified
 #' @return A list with named elements, such as 'model', 'type', 'score'. The
 #' function returns a list with named elements and sublists, see examples for
 #' full overview of the returned values.
@@ -64,7 +66,8 @@ choose_model <- function(dataset,
                         fp_alpha = NA,
                         max_nsknots = 7,
                         max_fp_df = 4,
-                        verbose = TRUE) {
+                        verbose = TRUE,
+                        boundary_knots = NA) {
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
@@ -80,6 +83,7 @@ choose_model <- function(dataset,
   if (missing(max_nsknots)) max_nsknots <- 7
   if (missing(max_fp_df)) max_fp_df <- 4
   if (missing(verbose)) verbose <- TRUE
+  if (missing(boundary_knots)) boundary_knots <- NA
 
   ret_desc <- list(
     "mfp" = "Multivariate fractional polynomials",
@@ -121,9 +125,9 @@ suppressWarnings({
     # Natural splines with knots distanced by equally sized bins (quantiles)
     knotcnt_suggestion <-
       suggest_knotcount(dataset, !!dependent, !!independents, max_nsknots,
-        icr_fn = icr_fn)
+        icr_fn = icr_fn, boundary_knots = boundary_knots)
     ns_mod <- model_by_count(dataset, !!dependent, !!independents,
-      knotcnt_suggestion$nknots)
+      knotcnt_suggestion$nknots, boundary_knots = boundary_knots)
     ns_score <- icr_fn(ns_mod)
 
     extracted_knots <- extract_knots(ns_mod)
@@ -144,7 +148,8 @@ suppressWarnings({
 
     # Natural splines with freely placed knots
     cladina_res <- choose_splines(dataset, !!dependent, !!independents,
-      max_nsknots, icr_fn = icr_fn, cost_fn = cost_fn)
+      max_nsknots, icr_fn = icr_fn, cost_fn = cost_fn,
+      boundary_knots = boundary_knots)
 
     ret <-
       append(ret, list(ns_nu =

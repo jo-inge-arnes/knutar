@@ -12,7 +12,8 @@ suggest_splines(
   target_nknots,
   initial_nknots = -1,
   cost_fn = stats::AIC,
-  all_knots = FALSE
+  all_knots = FALSE,
+  boundary_knots = NA
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ used to compare which knot should be removed, passed to choose_removal}
 
 \item{all_knots}{If TRUE, then knots for all intermediate models will be
 included in return value. Default is FALSE.}
+
+\item{boundary_knots}{The boundary knot placements or NA if not specified}
 }
 \value{
 Returns the suggested natural splines model, or if the 'all_knots'

@@ -11,7 +11,8 @@ suggest_knotcount(
   independents,
   max_nknots = -1,
   icr_fn = stats::BIC,
-  all_scores = FALSE
+  all_scores = FALSE,
+  boundary_knots = NA
 )
 }
 \arguments{
@@ -25,8 +26,10 @@ suggest_knotcount(
 
 \item{all_scores}{If TRUE, all scores are returned in a list 'all_scores'}
 
+\item{boundary_knots}{The boundary knot placements}
+
 \item{maximum_knots}{The highest knot count to assess. Defaults the lower of
-40 and n / 3}
+50 and n / 2}
 }
 \value{
 A list with named elements 'nknots', 'score', and 'all_scores'

@@ -14,7 +14,8 @@ choose_model(
   fp_alpha = NA,
   max_nsknots = 7,
   max_fp_df = 4,
-  verbose = TRUE
+  verbose = TRUE,
+  boundary_knots = NA
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ the function choose_removal. Defaults to AIC.}
 (default 7)}
 
 \item{verbose}{Verbose output, default TRUE}
+
+\item{boundary_knots}{The boundary knot placements for natural cubic splines
+or NA if not specified}
 }
 \value{
 A list with named elements, such as 'model', 'type', 'score'. The

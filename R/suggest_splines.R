@@ -17,6 +17,7 @@
 #' used to compare which knot should be removed, passed to choose_removal
 #' @param all_knots If TRUE, then knots for all intermediate models will be
 #' included in return value. Default is FALSE.
+#' @param boundary_knots The boundary knot placements or NA if not specified
 #' @return Returns the suggested natural splines model, or if the 'all_knots'
 #' argument was TRUE, then a list with named elements 'model', 'all_knots', and
 #' 'Boundary.knots' is returned.
@@ -30,21 +31,26 @@ suggest_splines <- function(dataset,
                           target_nknots,
                           initial_nknots = -1,
                           cost_fn = stats::AIC,
-                          all_knots = FALSE) {
+                          all_knots = FALSE,
+                          boundary_knots = NA) {
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
+  if (missing(boundary_knots)) boundary_knots <- NA
 
   if (initial_nknots == -1) {
     initial_nknots <-
-      suggest_knotcount(dataset, !!dependent, !!independents)$nknots
+      suggest_knotcount(dataset, !!dependent, !!independents,
+        boundary_knots)$nknots
   }
+
   if (missing(cost_fn)) cost_fn <- stats::AIC
   if (missing(all_knots)) all_knots <- FALSE
 
   # Find the initial model with a high number of knots, and get the distinct
   # knot placements
   ns_model <-
-    model_by_count(dataset, !!dependent, !!independents, initial_nknots)
+    model_by_count(dataset, !!dependent, !!independents, initial_nknots,
+      boundary_knots)
   knots <- extract_knots(ns_model)
 
   intermediate_knots <- list()

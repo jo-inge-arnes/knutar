@@ -4,21 +4,34 @@
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
-#' @param nknots The requested number of knots
+#' @param nknots The requested number of knots, excluding the boundary knots
+#' @param boundary_knots The boundary knot placements
 #' @return The regression model
 #' @importFrom splines ns
 #' @export
 #' @examples
 #' my_model <- create_model(my_data, y, x, 7)
-model_by_count <- function(dataset, dependent, independents, nknots) {
+model_by_count <- function(dataset, dependent, independents, nknots,
+                            boundary_knots = NA) {
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
 
   independents_str <- sub("~", "", deparse(independents))
 
-  model_formula <- stats::as.formula(
-    paste0(rlang::as_name(dependent), " ~ ns(", independents_str,
-    ", df = ", nknots + 1, ")"))
+  if (missing(boundary_knots)) boundary_knots <- NA
+
+  if (is.na(boundary_knots)) {
+    model_formula <- stats::as.formula(
+      paste0(rlang::as_name(dependent), " ~ ns(", independents_str,
+      ", df = ", nknots + 1, ")"))
+  } else {
+    boundary_knots_str <- paste0(
+      "c(", paste0(boundary_knots, collapse = ", "), ")")
+    formula_str <- paste0(
+      rlang::as_name(dependent), " ~ ns(", independents_str,
+      ", df = ", nknots + 1, ", Boundary.knots = ", boundary_knots_str, ")")
+    model_formula <- stats::as.formula(formula_str)
+  }
 
   ns_model <- stats::glm(model_formula, data = dataset)
 
@@ -33,7 +46,7 @@ model_by_count <- function(dataset, dependent, independents, nknots) {
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
 #' @param knots The knot placements
-#' @param knots The boundary knot placements
+#' @param boundary_knots The boundary knot placements
 #' @return The regression model
 #' @importFrom splines ns
 #' @export

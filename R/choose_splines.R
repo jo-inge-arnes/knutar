@@ -16,6 +16,7 @@
 #' model be deemed a better model than an alternative lower knot model?
 #' @param all_models If TRUE, the function will include all intermediate models
 #' in the results as 'all_models'. Default is FALSE.
+#' @param boundary_knots The boundary knot placements or NA if not specified
 #' @return The chosen 'model', 'score', 'knots', and 'all_models'
 #' @export
 #' @examples
@@ -29,7 +30,8 @@ choose_splines <- function(dataset,
                         cost_fn = stats::AIC,
                         initial_nknots = -1,
                         diff_better = 0,
-                        all_models = FALSE) {
+                        all_models = FALSE,
+                        boundary_knots = NA) {
   independents <- rlang::enquo(independents)
   dependent <- rlang::enquo(dependent)
 
@@ -40,14 +42,16 @@ choose_splines <- function(dataset,
   if (missing(initial_nknots)) initial_nknots <- -1
   if (missing(diff_better)) diff_better <- 0
   if (missing(all_models)) all_models <- FALSE
+  if (missing(boundary_knots)) boundary_knots <- NA
 
   if (initial_nknots == -1) {
     initial_nknots <-
-      suggest_knotcount(dataset, !!dependent, !!independents)$nknots
+      suggest_knotcount(dataset, !!dependent, !!independents,
+        boundary_knots)$nknots
   }
 
   upper_model <- suggest_splines(dataset, !!dependent, !!independents,
-    max_nknots, initial_nknots, cost_fn)
+    max_nknots, initial_nknots, cost_fn, boundary_knots)
 
   cur_model <- upper_model
   best_model <- cur_model

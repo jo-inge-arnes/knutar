@@ -4,7 +4,7 @@
 \alias{model_by_count}
 \title{Utility function for natural splines that wraps the 'glm' and 'ns' functions}
 \usage{
-model_by_count(dataset, dependent, independents, nknots)
+model_by_count(dataset, dependent, independents, nknots, boundary_knots = NA)
 }
 \arguments{
 \item{dataset}{The data frame}
@@ -13,7 +13,9 @@ model_by_count(dataset, dependent, independents, nknots)
 
 \item{independents}{The independent variables in the formula}
 
-\item{nknots}{The requested number of knots}
+\item{nknots}{The requested number of knots, excluding the boundary knots}
+
+\item{boundary_knots}{The boundary knot placements}
 }
 \value{
 The regression model
