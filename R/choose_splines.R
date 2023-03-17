@@ -92,7 +92,7 @@ choose_splines <- function(dataset,
 # main <- function() {
 #   library(tidyverse)
 #   library(tidyr)
-#   library("cladina")
+#   library("knutar")
 
 #   # d <- read.table(
 #   #   "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
@@ -128,8 +128,8 @@ choose_splines <- function(dataset,
 
 #   best_global_nknots <- suggest_knotcount(d, Dependent, Independent)$nknots
 
-#   cladina_res <- choose_splines(d, Dependent, Independent, 10,
+#   knutar_res <- choose_splines(d, Dependent, Independent, 10,
 #     initial_nknots = best_global_nknots)
-#   cladina_res
+#   knutar_res
 # }
 #endregion

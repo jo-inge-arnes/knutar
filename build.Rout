@@ -24,24 +24,24 @@ Loading required package: usethis
 > library(roxygen2)
 > 
 > document()
-ℹ Updating cladina documentation
+ℹ Updating knutar documentation
 Warning: Version of roxygen2 last used with this package is 7.2.2.9000.  You only have version 7.1.2
-ℹ Loading cladina
+ℹ Loading knutar
 Writing NAMESPACE
 Writing NAMESPACE
 > setwd("..")
-> install("cladina")
-* checking for file ‘/mnt/c/Projects/cladina/DESCRIPTION’ ... OK
-* preparing ‘cladina’:
+> install("knutar")
+* checking for file ‘/mnt/c/Projects/knutar/DESCRIPTION’ ... OK
+* preparing ‘knutar’:
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
-* building ‘cladina_0.0.0.9090.tar.gz’
+* building ‘knutar_0.0.0.9090.tar.gz’
 
-Running /usr/lib/R/bin/R CMD INSTALL \
-  /tmp/RtmpIEmsG1/cladina_0.0.0.9090.tar.gz --install-tests 
+Running /usr/lib/R/bin/R CMD INSTALL /tmp/RtmpsZJoGj/knutar_0.0.0.9090.tar.gz \
+  --install-tests 
 * installing to library ‘/home/jo/R/x86_64-pc-linux-gnu-library/4.2’
-* installing *source* package ‘cladina’ ...
+* installing *source* package ‘knutar’ ...
 ** using staged installation
 ** R
 ** byte-compile and prepare package for lazy loading
@@ -51,8 +51,8 @@ Running /usr/lib/R/bin/R CMD INSTALL \
 ** testing if installed package can be loaded from temporary location
 ** testing if installed package can be loaded from final location
 ** testing if installed package keeps a record of temporary installation path
-* DONE (cladina)
+* DONE (knutar)
 > 
 > proc.time()
    user  system elapsed 
-  8.254   8.000  30.960 
+  7.319   7.066  28.537 

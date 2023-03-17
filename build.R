@@ -5,4 +5,4 @@ library(roxygen2)
 
 document()
 setwd("..")
-install("cladina")
+install("knutar")

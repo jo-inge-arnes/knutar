@@ -81,7 +81,7 @@ model_by_knots <- function(dataset,
 #   library(tidyverse)
 #   library(tidyr)
 #   library(splines)
-#   library("cladina")
+#   library("knutar")
 
 #   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
 #   file_name_test <-

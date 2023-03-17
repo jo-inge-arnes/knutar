@@ -148,31 +148,31 @@ suppressWarnings({
     }
 
     # Natural splines with freely placed knots
-    cladina_res <- choose_splines(dataset, !!dependent, !!independents,
+    knutar_res <- choose_splines(dataset, !!dependent, !!independents,
       max_nsknots, icr_fn = icr_fn, cost_fn = cost_fn,
       boundary_knots = boundary_knots)
 
     ret <-
       append(ret, list(ns_nu =
-        list(model = cladina_res$model,
-          score = cladina_res$score,
-          knot_cnt_distinct = length(cladina_res$knots$knots),
-          knot_placements = cladina_res$knots)))
+        list(model = knutar_res$model,
+          score = knutar_res$score,
+          knot_cnt_distinct = length(knutar_res$knots$knots),
+          knot_placements = knutar_res$knots)))
 
     if (verbose) {
       R.utils::printf("%s\n%s: %f\n",
-        ret_desc[["ns_nu"]], score_type, cladina_res$score)
-      print_knots(cladina_res$knots)
+        ret_desc[["ns_nu"]], score_type, knutar_res$score)
+      print_knots(knutar_res$knots)
       R.utils::printf("\n")
     }
 
-    if ((mfp_score <= ns_score) && (mfp_score <= cladina_res$score)) {
+    if ((mfp_score <= ns_score) && (mfp_score <= knutar_res$score)) {
       ret <- append(ret, list(model = mfp_mod, type = "mfp", score = mfp_score))
-    } else if (ns_score <= cladina_res$score) {
+    } else if (ns_score <= knutar_res$score) {
       ret <- append(ret, list(model = ns_mod, type = "ns", score = ns_score))
     } else {
-      ret <- append(ret, list(model = cladina_res$model, type = "ns_nu",
-        score = cladina_res$score))
+      ret <- append(ret, list(model = knutar_res$model, type = "ns_nu",
+        score = knutar_res$score))
     }
 
     if (verbose) {
@@ -188,7 +188,7 @@ suppressWarnings({
 #   library(tidyverse)
 #   library(tidyr)
 #   library(mfp)
-#   library("cladina")
+#   library("knutar")
 
 #   # d <- read.table(
 #   #   "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",

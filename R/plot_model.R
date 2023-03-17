@@ -68,8 +68,8 @@ plot_model <- function(dataset, dependent, independent, model) {
 #   d <- read.table(file_name, sep = ",", header = TRUE)
 #   d_test <- read.table(file_name_test, sep = ",", header = TRUE)
 
-#   mod <- cladina::model_by_count(d, Dependent, Independent, 4)
-#   cladina::plot_model(d, Dependent, Independent, mod)
+#   mod <- knutar::model_by_count(d, Dependent, Independent, 4)
+#   knutar::plot_model(d, Dependent, Independent, mod)
 
 #   print("ok")
 # }
