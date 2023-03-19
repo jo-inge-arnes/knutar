@@ -1,7 +1,7 @@
 #' Finds the best knot to remove from the given model
 #'
-#' The function searches through the knots of the given model to find the knot
-#' yielding the best resulting score if one knot has to be removed.
+#' The function searches through the knots of the given model to find the
+#' inner knot yielding the best resulting score if one knot has to be removed.
 #' The selection criterion function can be seen as a cost function, where
 #' lower scores are better.
 #' @param dataset The data frame

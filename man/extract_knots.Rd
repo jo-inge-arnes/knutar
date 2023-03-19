@@ -7,10 +7,10 @@
 extract_knots(ns_model)
 }
 \arguments{
-\item{ns_model}{The natural spline regression model}
+\item{ns_model}{The restricted cubic spline regression model}
 }
 \value{
-A list with named elements 'knots' and 'Boundary.knots'
+A list with named elements 'knots' (inner) and 'Boundary.knots'
 }
 \description{
 Extracts the distinct knot placements of natural spline regression models

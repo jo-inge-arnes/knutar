@@ -1,10 +1,10 @@
 Package: knutar
-Title: Suggest Knot Placements for Natural Splines
-Version: 0.0.0.9090
+Title: Restricted Cubic Splines Knot Selection
+Version: 0.0.0.9091
 Authors@R:
     person("Jo Inge", "Arnes", , "jo.i.arnes@uit.no", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8053-2741"))
-Description: Knutar is an R-package for suggesting knot placements for natural splines, aiming for good regression models with a low number of knots.
+Description: Knutar is an R-package for suggesting knot placements for restricted cubic splines, aiming for good regression models with a low number of knots.
 License: use_mit_license()
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

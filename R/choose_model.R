@@ -1,5 +1,8 @@
-#' Function assessing different types of regression models, returning the one
-#' giving the best results according to an information criterion
+#' Function assessing different types of regression models for a range of
+#' degrees of freedom (e.g. knots), returning the one yielding the best results
+#' according to an information criterion. The function uses fractional
+#' polynomials, restricted cubic splines, and restricted cubic splines with
+#' non-uniform knot placements.
 #'
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
@@ -9,12 +12,13 @@
 #' @param cost_fn The criterion used to choose which knots to remove, passed to
 #' the function choose_removal. Defaults to BIC.
 #' @param fp_alpha The relax factor for multivariate fractional polynomials
-#' @param max_nsknots The max number of knots for natural splines (default 7)
+#' @param max_nsknots The max number of inner knots for restricted cubic
+#' splines (default 4)
 #' @param max_fp_df The max degrees of freedom for fractional polynomials
 #' (default 7)
-#' @param verbose Verbose output, default TRUE
-#' @param boundary_knots The boundary knot placements for natural cubic splines
-#' or NA if not specified
+#' @param verbose Verbose output, default FALSE
+#' @param boundary_knots The boundary knot placements for restricted cubic
+#' splines or NA if not specified
 #' @return A list with named elements, such as 'model', 'type', 'score'. The
 #' function returns a list with named elements and sublists, see examples for
 #' full overview of the returned values.
@@ -42,16 +46,16 @@
 #' ret$mfp$model  # The model
 #' ret$mfp$score  # The score
 #'
-#' ret$ns         # Natural splines from quantiles
+#' ret$ns         # Restricted cubic splines from regular sequence of quantiles
 #' ret$ns$model   # The model
 #' ret$ns$score   # The score
-#' ret$ns$knot_cnt_arg      # The number of knots (df - 1) as input argument
+#' ret$ns$knot_cnt_arg      # The number of inner knots as input argument
 #' ret$ns$knot_cnt_distinct # The number of distinct placements in the result
 #' ret$ns$knot_placements   # Knots and boundary knots
 #' ret$ns$knot_placements$knots           # The knot placements as a list
 #' ret$ns$knot_placements$Boundary.knots  # The boundary knots as a list
 #'
-#' ret$ns_nu         # Natural splines non-uniform placements
+#' ret$ns_nu         # Restricted cubic splines w/non-uniform placements
 #' ret$ns_nu$model   # The model
 #' ret$ns_nu$score   # The score
 #' ret$ns_nu$knot_cnt_distinct # The number of distinct placements in the result
@@ -65,7 +69,7 @@ choose_model <- function(dataset,
                         icr_fn = stats::BIC,
                         cost_fn = stats::BIC,
                         fp_alpha = NA,
-                        max_nsknots = 7,
+                        max_nsknots = 4,
                         max_fp_df = 4,
                         verbose = TRUE,
                         boundary_knots = NA) {
@@ -88,8 +92,8 @@ choose_model <- function(dataset,
 
   ret_desc <- list(
     "mfp" = "Multivariate fractional polynomials",
-    "ns_nu" = "Natural splines with freely placed knots",
-    "ns" = "Natural splines with knots placed at quantiles")
+    "ns_nu" = "Restricted cubic splines with freely placed knots",
+    "ns" = "Restricted cubic splines with knots placed at quantiles")
   ret <-
     list(labels = ret_desc, score_fn = icr_fn, score_name = score_type)
 
@@ -123,7 +127,8 @@ choose_model <- function(dataset,
   }
 
 suppressWarnings({
-    # Natural splines with knots distanced by equally sized bins (quantiles)
+    # Restricted cubic splines with knots distanced by regular sequence
+    # of quantiles between the boundary knots
     knotcnt_suggestion <-
       suggest_knotcount(dataset, !!dependent, !!independents, max_nsknots,
         icr_fn = icr_fn, boundary_knots = boundary_knots)
@@ -147,7 +152,7 @@ suppressWarnings({
       R.utils::printf("\n")
     }
 
-    # Natural splines with freely placed knots
+    # Restricted cubic splines with freely placed knots between the boundaries
     knutar_res <- choose_splines(dataset, !!dependent, !!independents,
       max_nsknots, icr_fn = icr_fn, cost_fn = cost_fn,
       boundary_knots = boundary_knots)
@@ -182,68 +187,3 @@ suppressWarnings({
 
   return(ret)
 }
-
-#region code for debugging
-# main <- function() {
-#   library(tidyverse)
-#   library(tidyr)
-#   library(mfp)
-#   library("knutar")
-
-#   # d <- read.table(
-#   #   "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
-#   #   sep = ",", header = TRUE)
-#   # d <- d %>%
-#   #     drop_na(nwsize) %>%
-#   #     drop_na(age) %>%
-#   #     mutate(age_years = 2022 - age, age_dec = age_years / 10)
-
-
-#   # # Just to make is the same as the fields in the synthetic data
-#   # d$Independent <- d$age_dec
-#   # d$Dependent <- d$nwsize
-#   # d$SignalMeasured <- d$Dependent
-
-#   # # Shuffle the rows
-#   # set.seed(7)
-#   # d <- d[sample(1:nrow(d)), ]
-
-#   # # Bootstrap the data to create a training and a test set
-#   # n_split <- trunc(nrow(d) * 0.5)
-#   # d_full <- d
-#   # d <- d_full[1:n_split, ]
-#   # d_test <- d_full[(n_split + 1):nrow(d_full), ]
-
-#   # Synthetic data sets
-
-#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
-#   file_name_test <- "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
-
-#   d <- read.table(file_name, sep = ",", header = TRUE)
-#   d_test <- read.table(file_name_test, sep = ",", header = TRUE)
-
-#   ret <- choose_model(d, Dependent, Independent, BIC, verbose = FALSE)
-
-# #  print(ret$mfp)        # Multivariate fractional polynomial
-#   print(ret$mfp$model)  # The model
-#   print(ret$mfp$score)  # The score
-
-# #  print(ret$ns)         # Natural splines from quantiles
-#   print(ret$ns$model)   # The model
-#   print(ret$ns$score)   # The score
-#   print(ret$ns$knot_cnt_arg)      # The number of knots (df - 1) as input argument
-#   print(ret$ns$knot_cnt_distinct) # The number of distinct placements in the result
-# #  print(ret$ns$knot_placements)   # Knots and boundary knots
-#   print(ret$ns$knot_placements$knots)           # The knot placements as a list
-#   print(ret$ns$knot_placements$Boundary.knots) # The boundary knots as a list
-
-#  # print(ret$ns_nu)         # Natural splines non-uniform placements
-#   print(ret$ns_nu$model)   # The model
-#   print(ret$ns_nu$score)   # The score
-#   print(ret$ns_nu$knot_cnt_distinct) # The number of distinct placements in the result
-# #  print(ret$ns_nu$knot_placements)   # Knots and boundary knots
-#   print(ret$ns_nu$knot_placements$knots)          # The knot placements as a list
-#   print(ret$ns_nu$knot_placements$Boundary.knots) # The boundary knots as a list
-
-# }
-#endregion

@@ -2,8 +2,8 @@
 % Please edit documentation in R/suggest_knotcount.R
 \name{suggest_knotcount}
 \alias{suggest_knotcount}
-\title{Finds the number of natural spline knots that gives the lowest score for an
-information criterion and a data set.}
+\title{Finds the number of restricted cubic spline inner knots that gives the
+lowest score for an information criterion and a data set.}
 \usage{
 suggest_knotcount(
   dataset,
@@ -29,15 +29,15 @@ suggest_knotcount(
 
 \item{boundary_knots}{The boundary knot placements}
 
-\item{maximum_knots}{The highest knot count to assess. Defaults the lower of
-50 and n / 2}
+\item{maximum_knots}{The highest inner knot count to assess.
+Defaults the lower of 50 and n / 2}
 }
 \value{
 A list with named elements 'nknots', 'score', and 'all_scores'
 }
 \description{
-Finds the number of natural spline knots that gives the lowest score for an
-information criterion and a data set.
+Finds the number of restricted cubic spline inner knots that gives the
+lowest score for an information criterion and a data set.
 }
 \examples{
 suggest_knotcount(d, nwsize, age_dec)

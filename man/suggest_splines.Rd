@@ -2,8 +2,8 @@
 % Please edit documentation in R/suggest_splines.R
 \name{suggest_splines}
 \alias{suggest_splines}
-\title{Suggests a natural splines regression model with knot placements that
-can be non-uniform with respect to quantiles and widths}
+\title{Suggests a restricted cubic splines regression model with inner knot
+placements that can be non-uniform with respect to quantiles and widths}
 \usage{
 suggest_splines(
   dataset,
@@ -24,13 +24,14 @@ suggest_splines(
 
 \item{independents}{The independent variables in the formula}
 
-\item{target_nknots}{The target and maximum number of knots for the model}
+\item{target_nknots}{The target and maximum number of inner knots for the
+model}
 
-\item{initial_nknots}{The number of knots initially, defaults to the
+\item{initial_nknots}{The number of inner knots initially, defaults to the
 result from the function 'suggest_knotcount'}
 
 \item{cost_fn}{The function for the selection criterion score (BIC default)
-used to compare which knot should be removed, passed to choose_removal}
+used to compare which inner knot should be removed, passed to choose_removal}
 
 \item{all_knots}{If TRUE, then knots for all intermediate models will be
 included in return value. Default is FALSE.}
@@ -43,11 +44,12 @@ argument was TRUE, then a list with named elements 'model', 'all_knots', and
 'Boundary.knots' is returned.
 }
 \description{
-The target number of knots for the model is given as an input argument. The
-algorithm starts with a model with a high number of knots and systematically
-removes knots until the target number of knots is reached.
-The initial number of knots, before starting to remove knots, can be given
-as an argument as well, but  defaults to the suggested number of knots
+The target number of inner knots for the model is given as an input argument.
+The algorithm starts with a model with a high number of knots and
+systematically removes inner knots until the target number of inner knots is
+reached.
+The initial number of inner knots, before starting to remove knots, can be
+given as an argument as well, but  defaults to the suggested number
 obtained from the function 'suggest_knotcount'.
 }
 \examples{

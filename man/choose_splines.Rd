@@ -2,8 +2,8 @@
 % Please edit documentation in R/choose_splines.R
 \name{choose_splines}
 \alias{choose_splines}
-\title{Chooses the best from a set of natural splines regression models with
-a knot count lower than or equal to a specified maximum number of knots}
+\title{Chooses the best from a set of restricted cubic spline (RCS) models with
+an inner knot count lower than or equal to a specified maximum number}
 \usage{
 choose_splines(
   dataset,
@@ -26,16 +26,16 @@ choose_splines(
 
 \item{independents}{The independent variables in the formula}
 
-\item{max_nknots}{The maximum number of knots wanted}
+\item{max_nknots}{The maximum number of inner knots wanted}
 
 \item{icr_fn}{The information criterion function comparing models with
 different knot counts (BIC default)}
 
-\item{cost_fn}{The criterion used to choose which knot to remove, used by
-the function 'choose_removal'. Default is BIC.}
+\item{cost_fn}{The criterion used to choose which inner knot to remove, used
+by the function 'choose_removal'. Default is BIC.}
 
-\item{initial_nknots}{The initial high number of knots for the algorithm
-(default is the value from the 'suggest_knotcount'-function)}
+\item{initial_nknots}{The initial high number inner of knots for the
+algorithm (default is the value from the 'suggest_knotcount'-function)}
 
 \item{diff_better}{How much lower must the score be to make a higher knot
 model be deemed a better model than an alternative lower knot model?}
@@ -49,7 +49,7 @@ in the results as 'all_models'. Default is FALSE.}
 The chosen 'model', 'score', 'knots', and 'all_models'
 }
 \description{
-The maximum number of knots is given as an input argument.
+The maximum number of inner knots is given as an input argument.
 }
 \examples{
 my_model <- choose_splines(d, y, x, 7)

@@ -1,11 +1,11 @@
-#' Finds the number of natural spline knots that gives the lowest score for an
-#' information criterion and a data set.
+#' Finds the number of restricted cubic spline inner knots that gives the
+#' lowest score for an information criterion and a data set.
 #'
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variable(s) in the formula
-#' @param maximum_knots The highest knot count to assess. Defaults the lower of
-#' 50 and n / 2
+#' @param maximum_knots The highest inner knot count to assess.
+#' Defaults the lower of 50 and n / 2
 #' @param icr_fn The information criterion function. Defaults to BIC
 #' @param all_scores If TRUE, all scores are returned in a list 'all_scores'
 #' @param boundary_knots The boundary knot placements

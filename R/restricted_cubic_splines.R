@@ -1,10 +1,13 @@
-#' Utility function for natural splines that wraps the 'glm' and 'ns' functions
+#' Utility function for restricted cubic splines that wraps the 'glm' and 'ns'
+#' functions
 #'
-#' Creates a natural splines regression model given the wanted number of knots
+#' Creates a restricted cubic splines regression model given the wanted number
+#' of inner knots
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
-#' @param nknots The requested number of knots, excluding the boundary knots
+#' @param nknots The requested number of inner knots, excluding the boundary
+#' knots
 #' @param boundary_knots The boundary knot placements
 #' @return The regression model
 #' @importFrom splines ns
@@ -38,14 +41,15 @@ model_by_count <- function(dataset, dependent, independents, nknots,
   return(ns_model)
 }
 
-#' Utility function for natural splines that wraps the 'glm' and 'ns' functions
+#' Utility function for restricted cubic splines that wraps the 'glm' and 'ns'
+#' functions
 #'
-#' Creates a natural splines regression model from the given placements of
-#' the knots and boundary knots
+#' Creates a restricted cubic spline regression model from the given placements
+#' of the inner knots and boundary knots
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
 #' @param independents The independent variables in the formula
-#' @param knots The knot placements
+#' @param knots The inner knot placements
 #' @param boundary_knots The boundary knot placements
 #' @return The regression model
 #' @importFrom splines ns
@@ -75,27 +79,3 @@ model_by_knots <- function(dataset,
 
   return(ns_model)
 }
-
-#region code for debugging
-# main <- function() {
-#   library(tidyverse)
-#   library(tidyr)
-#   library(splines)
-#   library("knutar")
-
-#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
-#   file_name_test <-
-#     "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
-
-#   d <- read.table(file_name, sep = ",", header = TRUE)
-
-#   print("Hello")
-
-#   mod <- model_by_count(d, DependentRaw, SignalRaw + Noise, 7)
-#   mod <- model_by_knots(d, DependentRaw, SignalRaw + Noise,
-#     c(0.1, 0.2), c(-1, 1))
-
-
-#   mod
-# }
-#endregion

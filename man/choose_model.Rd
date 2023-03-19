@@ -2,8 +2,11 @@
 % Please edit documentation in R/choose_model.R
 \name{choose_model}
 \alias{choose_model}
-\title{Function assessing different types of regression models, returning the one
-giving the best results according to an information criterion}
+\title{Function assessing different types of regression models for a range of
+degrees of freedom (e.g. knots), returning the one yielding the best results
+according to an information criterion. The function uses fractional
+polynomials, restricted cubic splines, and restricted cubic splines with
+non-uniform knot placements.}
 \usage{
 choose_model(
   dataset,
@@ -13,7 +16,7 @@ choose_model(
   icr_fn = stats::BIC,
   cost_fn = stats::BIC,
   fp_alpha = NA,
-  max_nsknots = 7,
+  max_nsknots = 4,
   max_fp_df = 4,
   verbose = TRUE,
   boundary_knots = NA
@@ -34,15 +37,16 @@ the function choose_removal. Defaults to BIC.}
 
 \item{fp_alpha}{The relax factor for multivariate fractional polynomials}
 
-\item{max_nsknots}{The max number of knots for natural splines (default 7)}
+\item{max_nsknots}{The max number of inner knots for restricted cubic
+splines (default 4)}
 
 \item{max_fp_df}{The max degrees of freedom for fractional polynomials
 (default 7)}
 
-\item{verbose}{Verbose output, default TRUE}
+\item{verbose}{Verbose output, default FALSE}
 
-\item{boundary_knots}{The boundary knot placements for natural cubic splines
-or NA if not specified}
+\item{boundary_knots}{The boundary knot placements for restricted cubic
+splines or NA if not specified}
 }
 \value{
 A list with named elements, such as 'model', 'type', 'score'. The
@@ -50,8 +54,11 @@ function returns a list with named elements and sublists, see examples for
 full overview of the returned values.
 }
 \description{
-Function assessing different types of regression models, returning the one
-giving the best results according to an information criterion
+Function assessing different types of regression models for a range of
+degrees of freedom (e.g. knots), returning the one yielding the best results
+according to an information criterion. The function uses fractional
+polynomials, restricted cubic splines, and restricted cubic splines with
+non-uniform knot placements.
 }
 \examples{
 my_model <- choose_model(d, y, x)$model
@@ -74,16 +81,16 @@ ret$mfp        # Multivariate fractional polynomial
 ret$mfp$model  # The model
 ret$mfp$score  # The score
 
-ret$ns         # Natural splines from quantiles
+ret$ns         # Restricted cubic splines from regular sequence of quantiles
 ret$ns$model   # The model
 ret$ns$score   # The score
-ret$ns$knot_cnt_arg      # The number of knots (df - 1) as input argument
+ret$ns$knot_cnt_arg      # The number of inner knots as input argument
 ret$ns$knot_cnt_distinct # The number of distinct placements in the result
 ret$ns$knot_placements   # Knots and boundary knots
 ret$ns$knot_placements$knots           # The knot placements as a list
 ret$ns$knot_placements$Boundary.knots  # The boundary knots as a list
 
-ret$ns_nu         # Natural splines non-uniform placements
+ret$ns_nu         # Restricted cubic splines w/non-uniform placements
 ret$ns_nu$model   # The model
 ret$ns_nu$score   # The score
 ret$ns_nu$knot_cnt_distinct # The number of distinct placements in the result

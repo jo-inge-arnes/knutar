@@ -2,8 +2,7 @@
 % Please edit documentation in R/print_knots.R
 \name{print_knots}
 \alias{print_knots}
-\title{Function assessing different types of regression models, returning the one
-giving the best results according to an information criterion}
+\title{Print knot placements}
 \usage{
 print_knots(knot_placements)
 }
@@ -12,8 +11,7 @@ print_knots(knot_placements)
 'Boundary.knots'}
 }
 \description{
-Function assessing different types of regression models, returning the one
-giving the best results according to an information criterion
+Print knot placements
 }
 \examples{
 print_knots(knot_placements)
