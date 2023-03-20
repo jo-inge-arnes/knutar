@@ -3,10 +3,10 @@
 \name{choose_model}
 \alias{choose_model}
 \title{Function assessing different types of regression models for a range of
-degrees of freedom (e.g. knots), returning the one yielding the best results
-according to an information criterion. The function uses fractional
-polynomials, restricted cubic splines, and restricted cubic splines with
-non-uniform knot placements.}
+degrees of freedom (knots in the case of splines), returning the one yielding
+the best results according to an information criterion. The function uses
+fractional polynomials, restricted cubic splines, and restricted cubic splines
+with non-uniform knot placements.}
 \usage{
 choose_model(
   dataset,
@@ -41,7 +41,7 @@ the function choose_removal. Defaults to BIC.}
 splines (default 4)}
 
 \item{max_fp_df}{The max degrees of freedom for fractional polynomials
-(default 7)}
+(default 4, i.e., which is the same as a second-degree/two-terms FP)}
 
 \item{verbose}{Verbose output, default FALSE}
 
@@ -55,10 +55,10 @@ full overview of the returned values.
 }
 \description{
 Function assessing different types of regression models for a range of
-degrees of freedom (e.g. knots), returning the one yielding the best results
-according to an information criterion. The function uses fractional
-polynomials, restricted cubic splines, and restricted cubic splines with
-non-uniform knot placements.
+degrees of freedom (knots in the case of splines), returning the one yielding
+the best results according to an information criterion. The function uses
+fractional polynomials, restricted cubic splines, and restricted cubic splines
+with non-uniform knot placements.
 }
 \examples{
 my_model <- choose_model(d, y, x)$model

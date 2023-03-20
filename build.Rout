@@ -25,22 +25,24 @@ Loading required package: usethis
 > 
 > document()
 ℹ Updating knutar documentation
-Warning: Version of roxygen2 last used with this package is 7.2.2.9000.  You only have version 7.1.2
 ℹ Loading knutar
-Writing NAMESPACE
-Writing NAMESPACE
+Warning message:
+Installed roxygen2 is older than the version used with this package
+ℹ You have "7.2.2" but you need "7.2.2.9000" 
 > setwd("..")
 > install("knutar")
-* checking for file ‘/mnt/c/Projects/knutar/DESCRIPTION’ ... OK
+── R CMD build ─────────────────────────────────────────────────────────────────
+* checking for file ‘/home/jo/projects/knutar/DESCRIPTION’ ... OK
 * preparing ‘knutar’:
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
-* building ‘knutar_0.0.0.9091.tar.gz’
+Removed empty directory ‘knutar/logs’
+* building ‘knutar_0.0.0.9092.tar.gz’
 
-Running /usr/lib/R/bin/R CMD INSTALL /tmp/RtmpFo2MjF/knutar_0.0.0.9091.tar.gz \
+Running /usr/lib/R/bin/R CMD INSTALL /tmp/RtmpUcJYsq/knutar_0.0.0.9092.tar.gz \
   --install-tests 
-* installing to library ‘/home/jo/R/x86_64-pc-linux-gnu-library/4.2’
+* installing to library ‘/usr/local/lib/R/site-library’
 * installing *source* package ‘knutar’ ...
 ** using staged installation
 ** R
@@ -55,4 +57,4 @@ Running /usr/lib/R/bin/R CMD INSTALL /tmp/RtmpFo2MjF/knutar_0.0.0.9091.tar.gz \
 > 
 > proc.time()
    user  system elapsed 
-  7.397   7.277  28.164 
+  3.240   0.193   3.626 

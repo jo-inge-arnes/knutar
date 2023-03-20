@@ -1,8 +1,8 @@
 #' Function assessing different types of regression models for a range of
-#' degrees of freedom (e.g. knots), returning the one yielding the best results
-#' according to an information criterion. The function uses fractional
-#' polynomials, restricted cubic splines, and restricted cubic splines with
-#' non-uniform knot placements.
+#' degrees of freedom (knots in the case of splines), returning the one yielding 
+#' the best results according to an information criterion. The function uses 
+#' fractional polynomials, restricted cubic splines, and restricted cubic splines 
+#' with non-uniform knot placements.
 #'
 #' @param dataset The data frame
 #' @param dependent The dependent variable in the formula
@@ -15,7 +15,7 @@
 #' @param max_nsknots The max number of inner knots for restricted cubic
 #' splines (default 4)
 #' @param max_fp_df The max degrees of freedom for fractional polynomials
-#' (default 7)
+#' (default 4, i.e., which is the same as a second-degree/two-terms FP)
 #' @param verbose Verbose output, default FALSE
 #' @param boundary_knots The boundary knot placements for restricted cubic
 #' splines or NA if not specified
@@ -85,7 +85,7 @@ choose_model <- function(dataset,
   }
   if (missing(cost_fn)) cost_fn <- stats::BIC
   if (missing(fp_alpha)) fp_alpha <- NA
-  if (missing(max_nsknots)) max_nsknots <- 7
+  if (missing(max_nsknots)) max_nsknots <- 4
   if (missing(max_fp_df)) max_fp_df <- 4
   if (missing(verbose)) verbose <- TRUE
   if (missing(boundary_knots)) boundary_knots <- NA
@@ -97,33 +97,49 @@ choose_model <- function(dataset,
   ret <-
     list(labels = ret_desc, score_fn = icr_fn, score_name = score_type)
 
-  independents_str <- sub("~", "", deparse(independents))
+  only_positive_independents <- 
+    all(as.vector(model.matrix(independents, dataset)[, 2]) > 0)
 
-  # Multivariate fractional polynomials (move to separate func)
-  fp_formula <- stats::formula(paste0(
-    rlang::as_name(dependent),
-    " ~ fp(",
-    independents_str,
-    ", df = ",
-    max_fp_df,
-    ")"
-  ))
-  mfp_res <- NA
-  if (is.na(fp_alpha)) {
-    mfp_res <-
-      mfp::mfp(fp_formula, data = dataset, verbose = verbose)
+  if (only_positive_independents) {
+    independents_str <- sub("~", "", deparse(independents))
+
+    # Multivariate fractional polynomials (move to separate func)
+    fp_formula <- stats::formula(paste0(
+      rlang::as_name(dependent),
+      " ~ fp(",
+      independents_str,
+      ", df = ",
+      max_fp_df,
+      ")"
+    ))
+    mfp_res <- NA
+    if (is.na(fp_alpha)) {
+      mfp_res <-
+        mfp::mfp(fp_formula, data = dataset, verbose = verbose)
+    } else {
+      mfp_res <-
+        mfp::mfp(fp_formula, 
+          alpha = fp_alpha, data = dataset, verbose = verbose)
+    }
+    mfp_mod <- eval(summary(mfp_res)$call)
+    mfp_score <- icr_fn(mfp_mod)
+
+    ret <- append(ret, list(mfp = list(model = mfp_mod, score = mfp_score)))
+
+    if (verbose) {
+      R.utils::printf("-----------------------------------------------------\n")
+      R.utils::printf("%s\n%s: %f\n\n", 
+        ret_desc[["mfp"]], score_type, mfp_score)
+    }
   } else {
-    mfp_res <-
-      mfp::mfp(fp_formula, alpha = fp_alpha, data = dataset, verbose = verbose)
-  }
-  mfp_mod <- eval(summary(mfp_res)$call)
-  mfp_score <- icr_fn(mfp_mod)
+    if (verbose) {
+      R.utils::printf("-----------------------------------------------------\n")
+      R.utils::printf(paste("Skipped fractional polynomials because some",
+        "independent values were not larger than zero.\n", sep = " "))
+    }
 
-  ret <- append(ret, list(mfp = list(model = mfp_mod, score = mfp_score)))
-
-  if (verbose) {
-    R.utils::printf("-----------------------------------------------------\n")
-    R.utils::printf("%s\n%s: %f\n\n", ret_desc[["mfp"]], score_type, mfp_score)
+    mfp_mod <- NA
+    mfp_score <- Inf
   }
 
 suppressWarnings({
@@ -187,3 +203,70 @@ suppressWarnings({
 
   return(ret)
 }
+
+# #region code for debugging
+# main <- function() {
+#   library(tidyverse)
+#   library(tidyr)
+#   library(mfp)
+#   library("knutar")
+
+#   # d <- read.table(
+#   #   "~/datasets/human_penguin/explorepenguin_share_complete_cases.csv",
+#   #   sep = ",", header = TRUE)
+#   # d <- d %>%
+#   #     drop_na(nwsize) %>%
+#   #     drop_na(age) %>%
+#   #     mutate(age_years = 2022 - age, age_dec = age_years / 10)
+
+
+#   # # Just to make is the same as the fields in the synthetic data
+#   # d$Independent <- d$age_dec
+#   # d$Dependent <- d$nwsize
+#   # d$SignalMeasured <- d$Dependent
+
+#   # # Shuffle the rows
+#   # set.seed(7)
+#   # d <- d[sample(1:nrow(d)), ]
+
+#   # # Bootstrap the data to create a training and a test set
+#   # n_split <- trunc(nrow(d) * 0.5)
+#   # d_full <- d
+#   # d <- d_full[1:n_split, ]
+#   # d_test <- d_full[(n_split + 1):nrow(d_full), ]
+
+#   # Synthetic data sets
+
+#   file_name <- "../paper-3-package/regressionspaper/synthetic_linear.csv"
+#   file_name_test <- "../paper-3-package/regressionspaper/synthetic_linear_test.csv"
+
+#   d <- read.table(file_name, sep = ",", header = TRUE)
+#   d_test <- read.table(file_name_test, sep = ",", header = TRUE)
+
+#   ret <- choose_model(d, Dependent, Independent, BIC, verbose = TRUE)
+
+# #  print(ret$mfp)        # Multivariate fractional polynomial
+#   print(ret$mfp$model)  # The model
+#   print(ret$mfp$score)  # The score
+
+# #  print(ret$ns)         # Natural splines from quantiles
+#   print(ret$ns$model)   # The model
+#   print(ret$ns$score)   # The score
+#   print(ret$ns$knot_cnt_arg)      # The number of knots (df - 1) as input argument
+#   print(ret$ns$knot_cnt_distinct) # The number of distinct placements in the result
+# #  print(ret$ns$knot_placements)   # Knots and boundary knots
+#   print(ret$ns$knot_placements$knots)           # The knot placements as a list
+#   print(ret$ns$knot_placements$Boundary.knots) # The boundary knots as a list
+
+#  # print(ret$ns_nu)         # Natural splines non-uniform placements
+#   print(ret$ns_nu$model)   # The model
+#   print(ret$ns_nu$score)   # The score
+#   print(ret$ns_nu$knot_cnt_distinct) # The number of distinct placements in the result
+# #  print(ret$ns_nu$knot_placements)   # Knots and boundary knots
+#   print(ret$ns_nu$knot_placements$knots)          # The knot placements as a list
+#   print(ret$ns_nu$knot_placements$Boundary.knots) # The boundary knots as a list
+
+# }
+
+# main()
+# #endregion
