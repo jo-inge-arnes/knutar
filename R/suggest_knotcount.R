@@ -15,13 +15,13 @@
 #' @examples
 #' suggest_knotcount(d, nwsize, age_dec)
 suggest_knotcount <- function(dataset,
-                dependent,
-                independents,
-                max_nknots = -1,
-                ...,
-                icr_fn = stats::BIC,
-                all_scores = FALSE,
-                boundary_knots = NA) {
+                              dependent,
+                              independents,
+                              max_nknots = -1,
+                              ...,
+                              icr_fn = stats::BIC,
+                              all_scores = FALSE,
+                              boundary_knots = NA) {
   dependent <- rlang::enquo(dependent)
   independents <- rlang::enquo(independents)
 
@@ -45,20 +45,76 @@ suggest_knotcount <- function(dataset,
     boundary_knots_str <- ""
   } else {
     boundary_knots_str <- paste0(
-      ", Boundary.knots = c(", paste0(boundary_knots, collapse = ", "), ")")
+      ", Boundary.knots = c(", paste0(boundary_knots, collapse = ", "), ")"
+    )
   }
 
   consecutive_non_convergance <- 0
 
   for (i in 1:(max_nknots + 1)) {
-    model_formula <- stats::formula(paste0(
-      rlang::as_name(dependent),
-      " ~ ns(",
-      independents_str,
-      ", df = ",
-      i,
-      boundary_knots_str,
-      ")"))
+    # Because of a change between R 4.2.0 and 4.3.0, quantiles coinciding with
+    # boundary knots must now be removed.
+    #
+    # This caused a bit of rewriting...
+    #
+    # See: https://stat.ethz.ch/pipermail/r-announce/2023/000691.html
+    # "bs() and ns() in the (typical) case of automatic knot construction, when
+    # some of the supposedly inner knots coincide
+    # with boundary knots, now moves them inside (with a warning),
+    # building on PR#18442 by Ben Bolker."
+
+    subset_data <- dataset %>%
+      dplyr::filter(
+        !!independents >= boundary_knots[[1]],
+        !!independents <= boundary_knots[[2]]
+      )
+
+    n <- i - 1
+    knots <- c()
+
+    if (n > 0) {
+      quantiles <- unique(quantile(subset_data[[rlang::as_label(independents)]],
+        probs = c(0, seq(1 / n, 1, by = 1 / n))
+      ))
+
+      # Similar corrections would be needed if 'boundary_knots' uses quosures
+      if (quantiles[[1]] == boundary_knots[[1]]) {
+        quantiles <- quantiles[-1]
+      }
+
+      if (!length(quantiles) == 0 &&
+        quantiles[[length(quantiles)]] == boundary_knots[[2]]) {
+        quantiles <- quantiles[-length(quantiles)]
+      }
+
+      knots <- quantiles
+    }
+
+    model_formula_str <- NULL
+
+    if (length(knots) > 0) {
+      model_formula_str <- paste0(
+        rlang::as_label(dependent),
+        " ~ ns(",
+        independents_str,
+        ", knots = c(",
+        paste(knots, collapse = ", "),
+        ")",
+        boundary_knots_str,
+        ")"
+      )
+    } else {
+      model_formula_str <- paste0(
+        rlang::as_label(dependent),
+        " ~ ns(",
+        independents_str,
+        ", df = 1",
+        boundary_knots_str,
+        ")"
+      )
+    }
+
+    model_formula <- formula(model_formula_str)
 
     mod_spline <- NULL
 
@@ -83,12 +139,16 @@ suggest_knotcount <- function(dataset,
         min_ndf <- i
       }
     } else if (consecutive_non_convergance >= 3) {
-      warning(paste("Models failed to converge three consecutive times,",
-        "will not assess any higher knot counts."))
+      warning(paste(
+        "Models failed to converge three consecutive times,",
+        "will not assess any higher knot counts."
+      ))
       break
     }
   }
 
-  return(list(nknots = min_ndf - 1, score = min_icr,
-    all_scores = list(scores = scores, n_knots = n_knots)))
+  return(list(
+    nknots = min_ndf - 1, score = min_icr,
+    all_scores = list(scores = scores, n_knots = n_knots)
+  ))
 }
