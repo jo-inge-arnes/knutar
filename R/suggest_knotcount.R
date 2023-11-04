@@ -77,7 +77,6 @@ suggest_knotcount <- function(dataset,
         probs = c(0, seq(1 / n, 1, by = 1 / n))
       ))
 
-      # Similar corrections would be needed if 'boundary_knots' uses quosures
       if (quantiles[[1]] == boundary_knots[[1]]) {
         quantiles <- quantiles[-1]
       }
