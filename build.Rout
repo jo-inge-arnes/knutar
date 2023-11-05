@@ -1,5 +1,5 @@
 
-R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+R version 4.3.2 (2023-10-31) -- "Eye Holes"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -25,42 +25,36 @@ Loading required package: usethis
 > 
 > document()
 ℹ Updating knutar documentation
-Warning: Version of roxygen2 last used with this package is 7.2.2.9000.  You only have version 7.1.2
 ℹ Loading knutar
-Writing NAMESPACE
-Writing NAMESPACE
+Warning message:
+Installed roxygen2 is older than the version used with this package
+ℹ You have "7.2.2" but you need "7.2.2.9000" 
 > setwd("..")
 > install("knutar")
-* checking for file ‘/mnt/c/Projects/knutar/DESCRIPTION’ ... OK
+── R CMD build ─────────────────────────────────────────────────────────────────
+* checking for file ‘/home/jo/projects/knutar/DESCRIPTION’ ... OK
 * preparing ‘knutar’:
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories
+Removed empty directory ‘knutar/logs’
 * building ‘knutar_0.0.0.9098.tar.gz’
 
-Running /usr/lib/R/bin/R CMD INSTALL /tmp/Rtmp2j9z2K/knutar_0.0.0.9098.tar.gz \
+Running /usr/lib/R/bin/R CMD INSTALL /tmp/RtmpXNmA8W/knutar_0.0.0.9098.tar.gz \
   --install-tests 
 * installing to library ‘/usr/local/lib/R/site-library’
-Error: ERROR: no permission to install to directory ‘/usr/local/lib/R/site-library’
-
-Error: System command 'R' failed, exit status: 1, stdout & stderr were printed
-
- Stack trace:
-
- 1. devtools:::install("knutar")
- 2. pkgbuild::with_build_tools(required = FALSE, callr::rcmd("INSTALL",  ...
- 3. callr::rcmd("INSTALL", c(install_path, opts), echo = !quiet,  ...
- 4. callr:::run_r(options)
- 5. base:::with(options, with_envvar(env, do.call(processx::run,  ...
- 6. base:::with.default(options, with_envvar(env, do.call(processx::run,  ...
- 7. base:::eval(substitute(expr), data, enclos = parent.frame())
- 8. base:::eval(substitute(expr), data, enclos = parent.frame())
- 9. callr:::with_envvar(env, do.call(processx::run, c(list(bin, args = real_cmd ...
- 10. base:::force(code)
- 11. base:::do.call(processx::run, c(list(bin, args = real_cmdargs,  ...
- 12. (function (command = NULL, args = character(), error_on_status = TRUE,  ...
- 13. throw(new_process_error(res, call = sys.call(), echo = echo,  ...
-
- x System command 'R' failed, exit status: 1, stdout & stderr were printed 
-
-Execution halted
+* installing *source* package ‘knutar’ ...
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (knutar)
+> 
+> proc.time()
+   user  system elapsed 
+  2.900   0.273   3.321 
