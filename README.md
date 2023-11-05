@@ -1,7 +1,7 @@
 # Knutar
-Knutar is an R-package for suggesting knot placements for restricted cubic spines, aiming for regression models with a good fit for low numbers of knots, presented in the paper Greedy Knot Selection Algorithm for Restricted Cubic Spline Regression.
+Knutar is an R-package for suggesting knot placements for restricted cubic spines, aiming for regression models with a good fit for low numbers of knots, presented in the paper Greedy Knot Selection Algorithm for Restricted Cubic Spline Regression. 
 
-It is not yet published at CRAN but can be built locally.
+It is not yet published at CRAN but can be built locally. 
 
 Build with:
 ```
@@ -10,6 +10,11 @@ Build with:
 ```
 
 Note that some user may have to use ```sudo ./build.R```.
+
+The resulting package will be placed in the parent directory of your locally cloned repository. After building the package, you can install it via the _Packages_ tab in RStudio by choosing "Install from: Package Archive File (.zip; .tar.gz)". 
+
+## R Versions
+The package has been tested on R version 4.2.2 and 4.3.2.
 
 ## Update 4th of November, 2023
 
