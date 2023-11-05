@@ -3,7 +3,7 @@ Knutar is an R-package for suggesting knot placements for restricted cubic spine
 
 ## Building
 
-The package has not yet been published at CRAN but can be built locally. Build with:
+The package has not yet been published at CRAN but can be built locally. On Linux or WSL on Windows, you can build with:
 
 ```
 ./build.R
@@ -13,7 +13,11 @@ The package has not yet been published at CRAN but can be built locally. Build w
 Note that some users may have to use ```sudo ./build.R```.
 
 ## Installing
-The resulting package will be placed in the parent directory of your locally cloned repository. After building the package, you can install it via the _Packages_ tab in RStudio by choosing "Install from: Package Archive File (.zip; .tar.gz)". 
+The built package will be placed in the parent directory of your locally cloned repository. After building the package, you can install it via the _Packages_ tab in RStudio by choosing "Install from: Package Archive File (.zip; .tar.gz)". 
+
+## Pre-built version
+
+There is also a pre-built version of the package in the repository: []()
 
 ## R Versions
 The package has been tested on R version 4.2.2 and 4.3.2.
